@@ -1,4 +1,3 @@
-import React from "react";
 import NavBar from "../../Components/NavBar/NavBar";
 import TopNavBar from "../../Components/TopNavBar/TopNavBar";
 import heroBg from "../../assets/LandingPage/hero-bg.png";
@@ -12,284 +11,370 @@ import { MdArrowOutward } from "react-icons/md";
 import consultant1 from "../../assets/LandingPage/consultant1.png";
 import consultant2 from "../../assets/LandingPage/consultant2.png";
 import consultant3 from "../../assets/LandingPage/consultant3.png";
-import Schedule from "../../Components/Schedule/Schedule";
+import Newsletter from "../../Components/Newsletter/Newsletter";
 import Footer from "../../Components/Footer/Footer";
 const LandingPage = () => {
-    return (        
-        <>  
-        <div>
-            <TopNavBar />
-            <NavBar />
-        
-        <div 
-            className="bg-cover bg-center h-screen flex flex-col justify-center items-center text-white text-center" 
-            style={{ backgroundImage: `url(${heroBg})` }}
+  return (
+    <>
+      <div>
+        <TopNavBar />
+        <NavBar />
+
+        <div
+          className="relative bg-cover bg-center min-h-screen w-full"
+          style={{
+            backgroundImage: `url(${heroBg})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
         >
-            <h1 className="text-8xl font-bold mb-6">Live Green, Live Luxuriously.</h1>
-            <div className="flex items-center">
-                <div className="relative">
-                    <select className="mr-0 p-2 rounded-l-full border-none bg-gray-200 font-semibold text-black h-full appearance-none pr-10">
-                        <option>For Sale</option>
-                        <option>For Rent</option>
-                        <option>Sold</option>
-                    </select>
-                    <MdKeyboardArrowDown className=" text-2xl absolute right-4 top-1/2 transform -translate-y-1/2 text-black" />
-                </div>
-                <input 
-                    type="text" 
-                    placeholder="Enter an address, city, neighborhood, or ZIP code." 
-                    className="p-2 border-none bg-white text-black w-[70rem]"
-                />
-                <button className="ml-0 p-3 bg-[#9C8321] rounded-r-full text-white flex items-center">
-                    <GoSearch />
-                </button>
+          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+          <div className="relative z-10 flex flex-col justify-center items-center min-h-screen text-white text-center px-4 sm:px-6 lg:px-8">
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold mb-6 leading-tight">
+              Live Green, Live Luxuriously.
+            </h1>
+            <div className="flex flex-col sm:flex-row items-center w-full max-w-6xl gap-2">
+              <div className="relative w-full sm:w-auto">
+                <select className="w-full sm:w-auto p-2 rounded-lg sm:rounded-l-full sm:rounded-r-none border-none bg-gray-200 font-semibold text-black appearance-none pr-10">
+                  <option>For Sale</option>
+                  <option>For Rent</option>
+                  <option>Sold</option>
+                </select>
+                <MdKeyboardArrowDown className="text-2xl absolute right-4 top-1/2 transform -translate-y-1/2 text-black pointer-events-none" />
+              </div>
+              <input
+                type="text"
+                placeholder="Enter an address, city, neighborhood, or ZIP code."
+                className="w-full p-2 border-none bg-white text-black rounded-lg sm:rounded-none"
+              />
+              <button className="w-full sm:w-auto p-3 bg-[#9C8321] rounded-lg sm:rounded-l-none sm:rounded-r-full text-white flex items-center justify-center">
+                <GoSearch />
+              </button>
             </div>
-            
+          </div>
         </div>
 
         {/* About Us Section */}
-        <div className="py-10   text-center">
-                <h2 className="text-4xl font-bold mb-6 ">About Us</h2>
-            <div className="bg-secondary">
-                <div className="flex flex-col md:flex-row justify-around items-center  mb-12 ">
-                    <div className="max-w-md mb-6 ">
-                        <div className="flex items-center">
-                            <div className="border-t-4 border-tertiary w-full mb-2 "></div>
-                            <h3 className="text-2xl font-semibold text-tertiary mb-5 mr-[15rem] whitespace-nowrap">Who We Are</h3>
-                        </div>
-                        <div className="space-y-3">
-                        <p className="text-5xl text-left font-bold max-w-5xl text-nowrap">
-                            Pioneer in transferring technology 
-                        </p>
-                        <p className="text-5xl text-left font-bold max-w-5xl text-nowrap">
-                                solutions for real estate management 
-                            </p>
-                            <p className="text-5xl text-left font-bold max-w-5xl text-nowrap">
-                                in Vietnam with <span className="font-bold text-tertiary">EzLife Realty.</span>
-                            </p>
-                        </div>
-                        <div className="space-y-3 mt-10">
-                            <p className="text-2xl text-left mt-8 text-nowrap  ">
-                                <span className="font-bold">EZLIFE REALTY </span> is the company to develop and hand over the realty 
-                            </p>
-                            <p className="text-2xl text-left  text-nowrap  ">
-                                management solutions to the best quality. <span className="font-bold">EZLIFE REALTY </span> has got lots of 
-                            </p>
-                            <p className="text-2xl text-left  text-nowrap  ">
-                                practical experiences in consulting, managing, and applying technology in the
-                            </p>
-                            <p className="text-2xl text-left  text-nowrap  ">
-                                real estate. Dealing with our talented staff, we are willing to provides some 
-                            </p>
-                            <p className="text-2xl text-left  text-nowrap  ">
-                                good services including consultancy; professional training; exploitation and
-                            </p>
-                            <p className="text-2xl text-left  text-nowrap  ">
-                                technological application in our management and operation for our investors,
-                            </p>
-                        </div>
-                    </div>
-                        <img src={aboutus1} alt="Real estate" className="max-w-3xl ml-[34rem] rounded-lg " />
-                    </div>
-                    <div className="flex flex-col md:flex-row justify-around  items-center mt-24">
-                    <img src={aboutus2} alt="Team" className="max-w-3xl rounded-lg mr-[14rem] " />
-                        <div className="max-w-md mb-6 mr-[20rem]">
-                        <div className="flex items-center">
-                            <div className="border-t-4 border-tertiary w-full mb-2 "></div>
-                            <h3 className="text-2xl font-semibold text-tertiary mb-5 mr-[15rem] whitespace-nowrap">Our Mission</h3>
-                        </div>
-                            <div className="space-y-3">
-                            <p className="text-5xl text-left font-bold text-nowrap">
-                                <span className="font-bold text-tertiary text-left ">EzLife Realty</span> will be the real estate 
-                            </p>
-                                <p className="text-5xl text-left font-bold text-nowrap">
-                                manager’s fellow.
-                            </p>    
-                            </div>
-                            <div className="space-y-3 mt-10">
-                                <p className="text-2xl text-left mt-8 text-nowrap">
-                                    The agency’s mission is to provide clients with a selection of properties 
-                                </p>
-                                <p className="text-2xl text-left mt-8 text-nowrap">
-                                    that meet high environmental standards, while also providing a 
-                                </p>
-                                <p className="text-2xl text-left mt-8 text-nowrap">
-                                    comfortable and luxurious lifestyle.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+        <div
+          data-aos="fade-up"
+          className="py-10 px-4 sm:px-6 lg:px-8 text-center"
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">About Us</h2>
+          <div className="bg-secondary">
+            <div className="flex flex-col lg:flex-row justify-around items-center gap-8 mb-12">
+              <div className="max-w-md px-4">
+                <div className="flex items-center mb-4">
+                  <div className="border-t-4 border-tertiary flex-grow"></div>
+                  <h3 className="text-xl sm:text-2xl font-semibold text-tertiary ml-4 whitespace-nowrap">
+                    Who We Are
+                  </h3>
                 </div>
+                <div className="space-y-3 text-left">
+                  <p className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                    Pioneer in transferring technology solutions for real estate
+                    management in Vietnam with{" "}
+                    <span className="text-tertiary">EzLife Realty.</span>
+                  </p>
+                  <div className="mt-6 space-y-2 text-lg sm:text-xl lg:text-2xl">
+                    <p>
+                      <span className="font-bold">EZLIFE REALTY</span> is the
+                      company to develop and hand over the realty management
+                      solutions to the best quality.
+                    </p>
+                    <p>
+                      <span className="font-bold">EZLIFE REALTY</span> has got
+                      lots of practical experiences in consulting, managing, and
+                      applying technology in the real estate.
+                    </p>
+                    <p>
+                      Dealing with our talented staff, we are willing to
+                      provides some good services including consultancy;
+                      professional training; exploitation and technological
+                      application in our management and operation for our
+                      investors.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <img
+                src={aboutus1}
+                alt="Real estate"
+                className="max-w-full lg:max-w-3xl rounded-lg"
+              />
             </div>
-            <ViewHome />
-            {/* Our Services Section */}
-            <div className="py-10 text-center">
-                <h2 className="text-4xl font-bold mb-6 ">Our Services</h2>
-                <div className="bg-secondary p-6">
-                    <div className="flex flex-col md:flex-row items-center">
-                        <img src={services} alt="Our Services" className="max-w-md mb-4 md:mb-0 md:mr-4" />
-                        <div className="flex flex-col items-start text-left ml-20">
-                            <div className="space-y-3">
-                                <p className="text-2xl">
-                                    Customers contact EzLife Vietnam to be introduced in detail about PMSS 
-                                </p>
-                                <p className="text-2xl ">
-                                    Technology Solution as well as provide some qualitative information about the 
-                                </p>
-                                <p className="text-2xl ">
-                                    project so that Ezlife Vietnam can support consulting suitable to the needs. 
-                                </p>
-                                <p className="text-2xl ">
-                                    Based on the requirements and information provided by customers, EzLife 
-                                </p>
-                                <p className="text-2xl ">
-                                    Vietnam experts will conduct a survey at the project to advise on building
-                                </p>
-                                <p className="text-2xl ">
-                                    methods and processes, personnel, and then provide a service report.
-                                </p>
-                            </div>
-                            <div className="flex justify-center mt-10">
-                                <button className="flex items-center text-white bg-tertiary px-4 py-2 rounded-full">
-                                Read more
-                                <MdArrowOutward className="text-white ml-1 text-lg"/>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+
+            {/* Second part of About Us */}
+            <div className="flex flex-col-reverse lg:flex-row justify-around items-center gap-8 mt-12">
+              <img
+                src={aboutus2}
+                alt="Team"
+                className="max-w-full lg:max-w-3xl rounded-lg"
+              />
+              <div className="max-w-md px-4">
+                <div className="flex items-center mb-4">
+                  <div className="border-t-4 border-tertiary flex-grow"></div>
+                  <h3 className="text-xl sm:text-2xl font-semibold text-tertiary ml-4 whitespace-nowrap">
+                    Our Mission
+                  </h3>
                 </div>
+                <div className="space-y-3 text-left">
+                  <p className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                    <span className="text-tertiary">EzLife Realty</span> will be
+                    the real estate manager’s fellow.
+                  </p>
+                  <div className="mt-6 space-y-2 text-lg sm:text-xl lg:text-2xl">
+                    <p>
+                      The agency’s mission is to provide clients with a
+                      selection of properties that meet high environmental
+                      standards, while also providing a comfortable and
+                      luxurious lifestyle.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-            {/* Consultant & Training Section */}
-            <div className="py-10 text-center">
-                <h2 className="text-4xl font-bold mb-16">Consultant & Training</h2>
-                <div className="flex flex-col md:flex-row justify-center">
-                    <div className="max-w-xs bg-white overflow-hidden mr-4 relative">
-                        <img src={consultant1} alt="Management Consultant" className="w-full h-96 object-cover" />
-                        <div className="absolute inset-0 bottom-7 flex items-center justify-center">
-                            <h3 className="text-2xl font-semibold text-white">Management Consultant</h3>
-                        </div>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="max-w-xs bg-white overflow-hidden mb-4 relative">
-                            <img src={consultant2} alt="Real Estate Management Tech Solutions" className="w-full h-48 object-cover" />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <h3 className="text-xl font-semibold text-white">Real Estate Management Tech Solutions</h3>
-                            </div>
-                        </div>
-                        <div className="max-w-xs bg-white overflow-hidden relative">
-                            <img src={consultant3} alt="Resort and Hotel Management Solution" className="w-full h-44 object-cover" />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <h3 className="text-xl font-semibold text-white">Resort and Hotel Management Solution</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Our Latest News Section */}
-            <div className="py-10 text-center bg-secondary">
-                <h2 className="text-4xl font-bold mb-6">Our Latest News</h2>
-                <div className="space-x-4 flex justify-center">
-                    <div className="rounded-lg p-4">
-                        <div className="text-center flex flex-col items-center">
-                            <div className="flex flex-col items-center absolute left-96 bg-white rounded-b-lg w-16 p-2">
-                                <span className="block text-black font-bold text-xl">28</span>
-                                <span className="block text-gray-500 text-lg">Tue</span>
-                            </div>
-                            <img src={consultant1} alt="News 1" className="w-96 h-72 object-cover rounded-lg" />
-                            <p className="mt-2 text-2xl font-semibold">EZLIFE organized activities toward</p>
-                            <p className=" text-2xl font-semibold">WORLD ENVIRONMENT DAY</p>
-                        </div>
-                        
-                    </div>
-                    <div className="rounded-lg p-4">
-                        <div className="text-center flex flex-col items-center">
-                        <div className="flex flex-col items-center absolute left-[51rem] bg-white rounded-b-lg w-16 p-2">
-                                <span className="block text-black font-bold text-xl">08</span>
-                                <span className="block text-gray-500 text-lg">Mon</span>
-                            </div>
-                            <img src={consultant2} alt="News 2" className="w-96 h-72 object-cover rounded-lg" />
-                            <p className="mt-2 text-2xl text-wrap font-semibold">Ezlife officially launch new project</p>
-                            <p className="text-2xl text-wrap font-semibold">UIT</p>
-                        </div>
-                        
-                    </div>
-                    <div className="rounded-lg p-4">
-                        <div className="text-center flex flex-col items-center">
-                        <div className="flex flex-col items-center absolute left-[78rem] bg-white rounded-b-lg w-16 p-2">
-                                <span className="block text-black font-bold text-xl">26</span>
-                                <span className="block text-gray-500 text-lg">Wed</span>
-                            </div>
-                            <img src={consultant3} alt="News 3" className="w-96 h-72 object-cover rounded-lg" />
-                            <p className="mt-2 text-2xl text-wrap font-semibold">Ezlife do charities to children</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex justify-center mt-4">
-                    <button className="flex items-center text-white bg-tertiary px-4 py-2 rounded-full">
-                        Read more
-                        <MdArrowOutward className="text-white ml-1 text-lg"/>
-                    </button>
-                </div>
-            </div>
-            {/* Our Blog Section */}
-            <div className="py-10 text-center bg-white">
-                <p className="text-xl font-medium"> WHAT'S TRENDING</p>
-                <h2 className="text-4xl font-bold mb-6">Our Blogs</h2>
-                <div className="space-x-4 flex justify-center">
-                    <div className="rounded-lg p-4">
-                        <div className="text-center flex flex-col items-center">
-                            <div className="flex flex-col items-center absolute left-96 bg-white rounded-b-lg w-16 p-2">
-                                <span className="block text-black font-bold text-xl">28</span>
-                                <span className="block text-gray-500 text-lg">Tue</span>
-                            </div>
-                            <img src={consultant1} alt="News 1" className="w-96 h-72 object-cover rounded-lg" />
-                            <p className="mt-2 text-2xl font-semibold">Top 10 Home Buying Mistakes </p>
-                            <p className=" text-2xl font-semibold">to Avoid</p>
-                            <p className="text-gray-500"> Etiam eget elementum elit. Aenean dignissim </p>
-                            <p className="text-gray-500"> dapibus vestibulum</p>
-                        </div>
-                        
-                    </div>
-                    <div className="rounded-lg p-4">
-                        <div className="text-center flex flex-col items-center">
-                        <div className="flex flex-col items-center absolute left-[51rem] bg-white rounded-b-lg w-16 p-2">
-                                <span className="block text-black font-bold text-xl">08</span>
-                                <span className="block text-gray-500 text-lg">Mon</span>
-                            </div>
-                            <img src={consultant2} alt="News 2" className="w-96 h-72 object-cover rounded-lg" />
-                            <p className="mt-2 text-2xl text-wrap font-semibold">How to Stage Your Home </p>
-                            <p className="text-2xl text-wrap font-semibold">for a Quick Sale</p>
-                            <p className="text-gray-500"> Nullam odio lacus, dictum quis pretium  </p>
-                            <p className="text-gray-500"> congue, vehicula venenatis nunc</p>
-                            
-                        </div>
-                        
-                    </div>
-                    <div className="rounded-lg p-4">
-                        <div className="text-center flex flex-col items-center">
-                        <div className="flex flex-col items-center absolute left-[78rem] bg-white rounded-b-lg w-16 p-2">
-                                <span className="block text-black font-bold text-xl">26</span>
-                                <span className="block text-gray-500 text-lg">Wed</span>
-                            </div>
-                            <img src={consultant3} alt="News 3" className="w-96 h-72 object-cover rounded-lg" />
-                            <p className="mt-2 text-2xl text-wrap font-semibold">5 Tips for First-Time Home Sellers</p>
-                            <p className="text-gray-500"> In hac habitasse platea dictumst.  </p>
-                            <p className="text-gray-500"> Phasellus vel velit vel augue maximus</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex justify-center mt-4">
-                    <button className="flex items-center text-white bg-tertiary px-4 py-2 rounded-full">
-                        Browse Now
-                        <MdArrowOutward className="text-white ml-1 text-lg"/>
-                    </button>
-                </div>
-            </div>
-            <Schedule />
-            <Footer />
+          </div>
         </div>
-        </> 
-    )   
-}
+        <ViewHome />
+        {/* Our Services Section */}
+        <div
+          data-aos="fade-up"
+          className="py-10 px-4 sm:px-6 lg:px-8 text-center"
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">Our Services</h2>
+          <div className="bg-secondary p-4 sm:p-6">
+            <div className="flex flex-col lg:flex-row items-center gap-8">
+              <img
+                src={services}
+                alt="Our Services"
+                className="max-w-full lg:max-w-md rounded-lg"
+              />
+              <div className="flex flex-col items-start text-left space-y-4">
+                <div className="space-y-3">
+                  <p className="text-2xl">
+                    Customers contact EzLife Vietnam to be introduced in detail
+                    about PMSS Technology Solution as well as provide some
+                    qualitative information about the project so that Ezlife
+                    Vietnam can support consulting suitable to the needs.
+                  </p>
+                  <p className="text-2xl ">
+                    Based on the requirements and information provided by
+                    customers, EzLife Vietnam experts will conduct a survey at
+                    the project to advise on building methods and processes,
+                    personnel, and then provide a service report.
+                  </p>
+                </div>
+                <div className="flex justify-center mt-10">
+                  <button className="flex items-center text-white bg-tertiary px-4 py-2 rounded-full">
+                    Read more
+                    <MdArrowOutward className="text-white ml-1 text-lg" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Consultant & Training Section */}
+        <div
+          data-aos="fade-up"
+          className="py-10 px-4 sm:px-6 lg:px-8 text-center"
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold mb-8">
+            Consultant & Training
+          </h2>
+          <div className="flex flex-col md:flex-row justify-center gap-4">
+            <div className="w-full md:w-auto">
+              <div className="relative aspect-[3/4] w-full md:w-96">
+                <img
+                  src={consultant1}
+                  alt="Management Consultant"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-white px-4 text-center">
+                    Management Consultant
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="w-full md:w-auto">
+                <div className="relative aspect-[3/4] w-full md:w-96">
+                  <img
+                    src={consultant2}
+                    alt="Real Estate Management Tech Solutions"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-white px-4 text-center">
+                      Real Estate Management Tech Solutions
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div className="w-full md:w-auto">
+                <div className="relative aspect-[3/4] w-full md:w-96">
+                  <img
+                    src={consultant3}
+                    alt="Resort and Hotel Management Solution"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-white px-4 text-center">
+                      Resort and Hotel Management Solution
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Our Latest News Section */}
+        <div
+          data-aos="fade-up"
+          className="py-10 px-4 sm:px-6 lg:px-8 text-center bg-secondary"
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+            Our Latest News
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="relative">
+              <div className="absolute left-4 top-0 bg-white rounded-b-lg w-16 p-2 z-10">
+                <span className="block text-black font-bold text-xl">28</span>
+                <span className="block text-gray-500 text-lg">Tue</span>
+              </div>
+              <img
+                src={consultant1}
+                alt="News 1"
+                className="w-full aspect-video object-cover rounded-lg"
+              />
+              <div className="mt-4">
+                <p className="text-xl sm:text-2xl font-semibold">
+                  EZLIFE organized activities toward WORLD ENVIRONMENT DAY
+                </p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute left-4 top-0 bg-white rounded-b-lg w-16 p-2 z-10">
+                <span className="block text-black font-bold text-xl">08</span>
+                <span className="block text-gray-500 text-lg">Mon</span>
+              </div>
+              <img
+                src={consultant2}
+                alt="News 2"
+                className="w-full aspect-video object-cover rounded-lg"
+              />
+              <div className="mt-4">
+                <p className="text-xl sm:text-2xl font-semibold">
+                  Ezlife officially launch new project UIT
+                </p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute left-4 top-0 bg-white rounded-b-lg w-16 p-2 z-10">
+                <span className="block text-black font-bold text-xl">26</span>
+                <span className="block text-gray-500 text-lg">Wed</span>
+              </div>
+              <img
+                src={consultant3}
+                alt="News 3"
+                className="w-full aspect-video object-cover rounded-lg"
+              />
+              <div className="mt-4">
+                <p className="text-xl sm:text-2xl font-semibold">
+                  Ezlife do charities to children
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center mt-4">
+            <button className="flex items-center text-white bg-tertiary px-4 py-2 rounded-full">
+              Read more
+              <MdArrowOutward className="text-white ml-1 text-lg" />
+            </button>
+          </div>
+        </div>
+        {/* Our Blog Section */}
+        <div
+          data-aos="fade-up"
+          className="py-10 px-4 sm:px-6 lg:px-8 text-center bg-white"
+        >
+          <p className="text-xl font-medium"> WHAT&apos;S TRENDING</p>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">Our Blogs</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="relative">
+              <div className="absolute left-4 top-0 bg-white rounded-b-lg w-16 p-2 z-10">
+                <span className="block text-black font-bold text-xl">28</span>
+                <span className="block text-gray-500 text-lg">Tue</span>
+              </div>
+              <img
+                src={consultant1}
+                alt="News 1"
+                className="w-full aspect-video object-cover rounded-lg"
+              />
+              <div className="mt-4">
+                <p className="text-xl sm:text-2xl font-semibold">
+                  Top 10 Home Buying Mistakes to Avoid
+                </p>
+                <p className="text-gray-500">
+                  Etiam eget elementum elit. Aenean dignissim dapibus vestibulum
+                </p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute left-4 top-0 bg-white rounded-b-lg w-16 p-2 z-10">
+                <span className="block text-black font-bold text-xl">08</span>
+                <span className="block text-gray-500 text-lg">Mon</span>
+              </div>
+              <img
+                src={consultant2}
+                alt="News 2"
+                className="w-full aspect-video object-cover rounded-lg"
+              />
+              <div className="mt-4">
+                <p className="text-xl sm:text-2xl font-semibold">
+                  How to Stage Your Home for a Quick Sale
+                </p>
+                <p className="text-gray-500">
+                  Nullam odio lacus, dictum quis pretium congue, vehicula
+                  venenatis nunc
+                </p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute left-4 top-0 bg-white rounded-b-lg w-16 p-2 z-10">
+                <span className="block text-black font-bold text-xl">26</span>
+                <span className="block text-gray-500 text-lg">Wed</span>
+              </div>
+              <img
+                src={consultant3}
+                alt="News 3"
+                className="w-full aspect-video object-cover rounded-lg"
+              />
+              <div className="mt-4">
+                <p className="text-xl sm:text-2xl font-semibold">
+                  5 Tips for First-Time Home Sellers
+                </p>
+                <p className="text-gray-500">
+                  In hac habitasse platea dictumst. Phasellus vel velit vel
+                  augue maximus
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center mt-4">
+            <button className="flex items-center text-white bg-tertiary px-4 py-2 rounded-full">
+              Browse Now
+              <MdArrowOutward className="text-white ml-1 text-lg" />
+            </button>
+          </div>
+        </div>
+        <Newsletter />
+        <Footer />
+      </div>
+    </>
+  );
+};
 
 export default LandingPage;
