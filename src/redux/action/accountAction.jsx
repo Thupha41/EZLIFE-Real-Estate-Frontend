@@ -1,5 +1,5 @@
 import axios from "../../setup/axios";
-import Modal from "../../Components/Modal/Modal";
+import { Modal } from "antd";
 import { createRoot } from "react-dom/client";
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";

@@ -1,5 +1,3 @@
-import NavBar from "../../Components/NavBar/NavBar";
-import TopNavBar from "../../Components/TopNavBar/TopNavBar";
 import heroBg from "../../assets/LandingPage/hero-bg.png";
 import { GoSearch } from "react-icons/go";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -11,15 +9,11 @@ import { MdArrowOutward } from "react-icons/md";
 import consultant1 from "../../assets/LandingPage/consultant1.png";
 import consultant2 from "../../assets/LandingPage/consultant2.png";
 import consultant3 from "../../assets/LandingPage/consultant3.png";
-import Newsletter from "../../Components/Newsletter/Newsletter";
-import Footer from "../../Components/Footer/Footer";
+
 const LandingPage = () => {
   return (
     <>
       <div>
-        <TopNavBar />
-        <NavBar />
-
         <div
           className="relative bg-cover bg-center min-h-screen w-full"
           style={{
@@ -359,8 +353,6 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-        <Newsletter />
-        <Footer />
       </div>
     </>
   );

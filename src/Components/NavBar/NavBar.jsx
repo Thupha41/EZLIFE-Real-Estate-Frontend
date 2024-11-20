@@ -3,9 +3,8 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { RiMenu3Line } from "react-icons/ri";
 import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
 const NavBar = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -16,11 +15,12 @@ const NavBar = () => {
     <div className="relative bg-white shadow">
       <div className="flex items-center justify-between p-4">
         {/* Logo Section */}
-        <div className="flex items-center space-x-2 md:ml-7">
-          <img src={logo} alt="Logo" className="w-10 h-10 md:w-14 md:h-14" />
-          <h1 className="text-2xl md:text-3xl font-bold">Ezlife Realty</h1>
-        </div>
-
+        <Link to="/">
+          <div className="flex items-center space-x-2 md:ml-7">
+            <img src={logo} alt="Logo" className="w-10 h-10 md:w-14 md:h-14" />
+            <h1 className="text-2xl md:text-3xl font-bold">Ezlife Realty</h1>
+          </div>
+        </Link>
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center justify-center flex-grow">
           <div className="flex items-center space-x-8">
@@ -49,7 +49,7 @@ const NavBar = () => {
               <MdKeyboardArrowDown className="text-gray-700 text-2xl" />
             </div>
             <a
-              href="#blog"
+              href="/blogs"
               className="text-gray-700 text-xl hover:text-gray-900"
             >
               Blog
@@ -68,17 +68,17 @@ const NavBar = () => {
             </a>
           </div>
         </nav>
-
         {/* Desktop Login Button */}
         <div className="hidden md:flex items-center md:ml-8">
-          <a
-            href="#login"
-            className="text-gray-700 text-xl border-2 border-gray-200 rounded-full px-6 py-2 hover:bg-gray-100 transition-colors"
+          <Link
+            to={`${import.meta.env.VITE_BACKEND_SSO}?serviceURL=${
+              import.meta.env.VITE_SERVICE_URL
+            }`}
+            className="text-gray-700 text-lg border-2 border-gray-200 rounded-full px-6 py-2 hover:bg-gray-100 transition-colors hover:text-[#3596FF] font-noto"
           >
-            Login
-          </a>
+            Log In
+          </Link>
         </div>
-
         {/* Mobile Menu Button */}
         <button
           className="md:hidden p-2 text-gray-500 hover:text-gray-600"
@@ -139,12 +139,14 @@ const NavBar = () => {
               Contact Us
             </a>
             {/* Mobile Login Button */}
-            <a
-              href="#login"
-              className="text-gray-700 text-lg border-2 border-gray-200 rounded-full px-6 py-2 hover:bg-gray-100 transition-colors text-center"
+            <Link
+              to={`${import.meta.env.VITE_BACKEND_SSO}?serviceURL=${
+                import.meta.env.VITE_SERVICE_URL
+              }`}
+              className="text-gray-800 hover:text-[#3596FF] font-noto text-xl"
             >
-              Login
-            </a>
+              Log In
+            </Link>
           </div>
         </div>
       )}
