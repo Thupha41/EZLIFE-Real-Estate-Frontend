@@ -15,6 +15,8 @@ const INITIAL_STATE = {
     email: "",
     first_name: "",
     last_name: "",
+    phone: "",
+    sex: "",
     roleWithPermission: {},
   },
   isLoading: false,

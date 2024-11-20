@@ -1,9 +1,9 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
-// let store;
-// export const injectStore = (_store) => {
-//   store = _store;
-// };
+let store;
+export const injectStore = (_store) => {
+  store = _store;
+};
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_API,
@@ -23,12 +23,12 @@ axiosRetry(instance, {
 // Add a request interceptor
 instance.interceptors.request.use(
   function (config) {
-    // const state = store.getState();
-    // const token = state.account?.userInfo?.access_token ?? "";
-    // if (token) {
-    //   config.headers["Authorization"] = `Bearer ${token}`;
-    // }
-    // return config;
+    const state = store.getState();
+    const token = state.account?.userInfo?.access_token ?? "";
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
   },
   function (error) {
     // Do something with request error
