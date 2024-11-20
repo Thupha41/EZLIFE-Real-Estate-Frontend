@@ -176,55 +176,44 @@ const LandingPage = () => {
           </div>
         </div>
         {/* Consultant & Training Section */}
-        <div
-          data-aos="fade-up"
-          className="py-10 px-4 sm:px-6 lg:px-8 text-center"
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-8">
-            Consultant & Training
-          </h2>
-          <div className="flex flex-col md:flex-row justify-center gap-4">
-            <div className="w-full md:w-auto">
-              <div className="relative aspect-[3/4] w-full md:w-96">
+        <div className="py-10 text-center">
+          <h2 className="text-4xl font-bold mb-16">Consultant & Training</h2>
+          <div className="flex flex-col md:flex-row justify-center">
+            <div className="max-w-xs bg-white overflow-hidden mr-4 relative">
+              <img
+                src={consultant1}
+                alt="Management Consultant"
+                className="w-full h-96 object-cover"
+              />
+              <div className="absolute inset-0 bottom-7 flex items-center justify-center">
+                <h3 className="text-2xl font-semibold text-white">
+                  Management Consultant
+                </h3>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <div className="max-w-xs bg-white overflow-hidden mb-4 relative">
                 <img
-                  src={consultant1}
-                  alt="Management Consultant"
-                  className="w-full h-full object-cover rounded-lg"
+                  src={consultant2}
+                  alt="Real Estate Management Tech Solutions"
+                  className="w-full h-48 object-cover"
                 />
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white px-4 text-center">
-                    Management Consultant
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h3 className="text-xl font-semibold text-white">
+                    Real Estate Management Tech Solutions
                   </h3>
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-4">
-              <div className="w-full md:w-auto">
-                <div className="relative aspect-[3/4] w-full md:w-96">
-                  <img
-                    src={consultant2}
-                    alt="Real Estate Management Tech Solutions"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-                    <h3 className="text-xl sm:text-2xl font-semibold text-white px-4 text-center">
-                      Real Estate Management Tech Solutions
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full md:w-auto">
-                <div className="relative aspect-[3/4] w-full md:w-96">
-                  <img
-                    src={consultant3}
-                    alt="Resort and Hotel Management Solution"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-                    <h3 className="text-xl sm:text-2xl font-semibold text-white px-4 text-center">
-                      Resort and Hotel Management Solution
-                    </h3>
-                  </div>
+              <div className="max-w-xs bg-white overflow-hidden relative">
+                <img
+                  src={consultant3}
+                  alt="Resort and Hotel Management Solution"
+                  className="w-full h-44 object-cover"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h3 className="text-xl font-semibold text-white">
+                    Resort and Hotel Management Solution
+                  </h3>
                 </div>
               </div>
             </div>
