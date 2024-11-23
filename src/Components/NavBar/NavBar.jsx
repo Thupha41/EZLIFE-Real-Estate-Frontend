@@ -43,20 +43,19 @@ const NavBar = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center justify-center flex-grow">
           <div className="flex items-center space-x-8">
-            <a
-              href="#about"
+            <Link
+              to="/about-us"
               className="text-gray-700 text-xl hover:text-gray-900"
             >
               About Us
-            </a>
+            </Link>
             <div className="flex items-center">
-              <a
-                href="#services"
+              <Link
+                to="/services"
                 className="text-gray-700 text-xl hover:text-gray-900"
               >
                 Services
-              </a>
-              <MdKeyboardArrowDown className="text-gray-700 text-2xl" />
+              </Link>
             </div>
             <div className="flex items-center">
               <a
@@ -79,12 +78,12 @@ const NavBar = () => {
             >
               News
             </a>
-            <a
-              href="#contact"
+            <Link
+              to="/consultant"
               className="text-gray-700 text-xl hover:text-gray-900"
             >
-              Contact Us
-            </a>
+              Consultant & Training
+            </Link>
           </div>
         </nav>
 
@@ -186,20 +185,19 @@ const NavBar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg z-50">
           <div className="flex flex-col space-y-4 p-4">
-            <a
-              href="#about"
+            <Link
+              to="/about-us"
               className="text-gray-700 text-lg hover:text-gray-900"
             >
               About Us
-            </a>
+            </Link>
             <div className="flex items-center justify-between">
-              <a
-                href="#services"
+              <Link
+                to="/services"
                 className="text-gray-700 text-lg hover:text-gray-900"
               >
                 Services
-              </a>
-              <MdKeyboardArrowDown className="text-gray-700 text-2xl" />
+              </Link>
             </div>
             <div className="flex items-center justify-between">
               <a
@@ -222,12 +220,12 @@ const NavBar = () => {
             >
               News
             </a>
-            <a
-              href="#contact"
+            <Link
+              to="/consultant"
               className="text-gray-700 text-lg hover:text-gray-900"
             >
-              Contact Us
-            </a>
+              Consultant & Training
+            </Link>
 
             {/* Mobile Login/User Profile */}
             {user ? (
@@ -248,12 +246,12 @@ const NavBar = () => {
                     </a>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="/consultant"
                       className="block text-gray-700 hover:text-gray-900"
                     >
-                      Contact Us
-                    </a>
+                      Consultant & Training
+                    </Link>
                   </li>
                   <li>
                     <button

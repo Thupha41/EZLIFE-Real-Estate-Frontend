@@ -1,7 +1,15 @@
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
 import { BiSolidHomeHeart } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="bg-[#02254B] text-white p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
@@ -32,11 +40,6 @@ const Footer = () => {
                 <FaInstagram className="text-[#213123] text-lg sm:text-xl" />
               </div>
             </div>
-
-            {/* Contact Button */}
-            <button className="bg-[#E4E5DF] font-medium text-[#213123] py-2 px-4 rounded-full hover:bg-gray-200 transition-colors w-fit">
-              Contact Us
-            </button>
           </div>
 
           {/* Navigation Links */}
@@ -45,13 +48,22 @@ const Footer = () => {
             <div>
               <h4 className="font-bold mb-4 text-lg">Navigation</h4>
               <ul className="space-y-3">
-                <li className="hover:text-gray-300 cursor-pointer">Company</li>
-                <li className="hover:text-gray-300 cursor-pointer">Home</li>
-                <li className="hover:text-gray-300 cursor-pointer">
-                  Contact Us
+                <li
+                  className="hover:text-gray-300 cursor-pointer"
+                  onClick={() => handleNavigation("/")}
+                >
+                  Home
                 </li>
-                <li className="hover:text-gray-300 cursor-pointer">Blog</li>
-                <li className="hover:text-gray-300 cursor-pointer">
+                <li
+                  className="hover:text-gray-300 cursor-pointer"
+                  onClick={() => handleNavigation("/blogs")}
+                >
+                  Blog
+                </li>
+                <li
+                  className="hover:text-gray-300 cursor-pointer"
+                  onClick={() => handleNavigation("/consultant")}
+                >
                   Consultant & Training
                 </li>
               </ul>
@@ -61,20 +73,17 @@ const Footer = () => {
             <div>
               <h4 className="font-bold mb-4 text-lg">Company</h4>
               <ul className="space-y-3">
-                <li className="hover:text-gray-300 cursor-pointer">About us</li>
-                <li className="hover:text-gray-300 cursor-pointer">
-                  Our mission and vision
+                <li
+                  className="hover:text-gray-300 cursor-pointer"
+                  onClick={() => handleNavigation("/about-us")}
+                >
+                  About us
                 </li>
-                <li className="hover:text-gray-300 cursor-pointer">Our team</li>
-              </ul>
-            </div>
-
-            {/* Support */}
-            <div>
-              <h4 className="font-bold mb-4 text-lg">Support</h4>
-              <ul className="space-y-3">
-                <li className="hover:text-gray-300 cursor-pointer">
-                  Contact us
+                <li
+                  className="hover:text-gray-300 cursor-pointer"
+                  onClick={() => handleNavigation("/services")}
+                >
+                  Services
                 </li>
               </ul>
             </div>
