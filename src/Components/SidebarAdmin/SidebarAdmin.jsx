@@ -1,17 +1,7 @@
 import { useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import {
-  LuLayoutDashboard,
-  LuParkingCircle,
-  LuFileKey,
-  LuUsers,
-} from "react-icons/lu";
-import {
-  MdManageAccounts,
-  MdSupervisorAccount,
-  MdEmojiTransportation,
-  MdOutlineManageHistory,
-} from "react-icons/md";
+import { LuLayoutDashboard, LuFileKey, LuUsers } from "react-icons/lu";
+import { MdManageAccounts, MdOutlineManageHistory } from "react-icons/md";
 import Logo from "../../assets/LandingPage/logo.png";
 import { Button, Layout, Menu, theme, Breadcrumb } from "antd";
 import { Link, useLocation, useNavigate, Outlet } from "react-router-dom";
@@ -20,12 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 import "./SidebarAdmin.css";
 import { FaUser } from "react-icons/fa";
 import { useSelector } from "react-redux";
-
+import { doLogout } from "../../redux/action/accountAction";
+import { useDispatch } from "react-redux";
 const { Header, Sider, Content } = Layout;
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dispatch = useDispatch();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -37,13 +29,10 @@ const Sidebar = () => {
   // Define breadcrumb name map
   const breadcrumbNameMap = {
     "/admin": "Dashboard",
-    "/admin/account": "Account",
-    "/admin/supplier": "Supplier",
-    "/admin/vehicle": "Vehicle",
-    "/admin/parking": "Parking",
+    "/admin/users": "User Management",
     "/admin/audit-log": "Audit Log",
-    "/admin/permission": "Permission",
-    "/admin/role": "Role",
+    "/admin/permissions": "Permission",
+    "/admin/roles": "Role",
   };
 
   // Generate breadcrumb items based on location
@@ -68,7 +57,7 @@ const Sidebar = () => {
   };
 
   const handleLogout = () => {
-    console.log("Logging out...");
+    dispatch(doLogout());
     navigate("/");
   };
 
@@ -103,38 +92,20 @@ const Sidebar = () => {
             {
               key: "account",
               icon: <MdManageAccounts />,
-              label: "Account",
-              onClick: () => navigate("/admin/account"),
+              label: "Users",
+              onClick: () => navigate("/admin/users"),
             },
             {
               key: "permission",
               icon: <LuFileKey />,
               label: "Permission",
-              onClick: () => navigate("/admin/permission"),
+              onClick: () => navigate("/admin/permissions"),
             },
             {
               key: "role",
               icon: <LuUsers />,
               label: "Role",
-              onClick: () => navigate("/admin/role"),
-            },
-            {
-              key: "supplier",
-              icon: <MdSupervisorAccount />,
-              label: "Supplier",
-              onClick: () => navigate("/admin/supplier"),
-            },
-            {
-              key: "vehicle",
-              icon: <MdEmojiTransportation />,
-              label: "Vehicle",
-              onClick: () => navigate("/admin/vehicle"),
-            },
-            {
-              key: "5",
-              icon: <LuParkingCircle />,
-              label: "Parking",
-              onClick: () => navigate("/admin/parking"),
+              onClick: () => navigate("/admin/roles"),
             },
             {
               key: "6",
@@ -175,7 +146,7 @@ const Sidebar = () => {
                         <FaUser className="text-white" />
                       </div>
                       <span className="ml-2 text-gray-900 hidden sm:block">
-                        {user.username}
+                        {user.first_name} {user.last_name}
                       </span>
                     </div>
                   </button>
@@ -185,7 +156,7 @@ const Sidebar = () => {
                     <div className="absolute right-0 z-50 mt-2 w-60 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="px-4 py-3">
                         <span className="block text-xl font-semibold text-gray-900">
-                          {user.fullname}
+                          {user.first_name} {user.last_name}
                         </span>
                         <span className="block text-sm text-gray-500 truncate mt-3">
                           {user.email}

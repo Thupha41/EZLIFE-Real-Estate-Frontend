@@ -80,15 +80,27 @@ const PermissionManagement = () => {
           message: "Success",
           description: "Permission updated successfully",
         });
+        setIsModalOpen(false);
+        form.resetFields();
+        dispatch(fetchPermissions(currentPage, pageSize));
       } else {
-        await dispatch(createPermission(values));
+        const response = await dispatch(createPermission(values));
+        if (!response || response.EC === -1) {
+          notification.error({
+            message: "Error",
+            description: response?.EM || "Permission URL already exists",
+          });
+          return;
+        }
+
         notification.success({
           message: "Success",
           description: "Permission created successfully",
         });
+        setIsModalOpen(false);
+        form.resetFields();
+        dispatch(fetchPermissions(currentPage, pageSize));
       }
-      setIsModalOpen(false);
-      dispatch(fetchPermissions(currentPage, pageSize));
     } catch (error) {
       notification.error({
         message: "Error",

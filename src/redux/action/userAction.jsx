@@ -81,10 +81,10 @@ export const createUser = (userData) => {
       const payload = {
         email: userData.email,
         password: userData.password,
-        username: userData.username,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
         phone: userData.phone,
         address: userData.address,
-        sex: userData.sex,
         roleId: userData.roleId,
         typeLogin: "local",
       };

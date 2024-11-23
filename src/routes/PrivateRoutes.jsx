@@ -25,8 +25,6 @@ const PrivateRoutes = ({ children, allowedRoles = [] }) => {
     // Redirect to appropriate route based on role instead of 404
     const roleRoutes = {
       admin: "/admin",
-      manager: "/manager",
-      planner: "/planner",
     };
     const redirectTo = roleRoutes[userRole] || "/404";
     return <Navigate to={redirectTo} replace />;

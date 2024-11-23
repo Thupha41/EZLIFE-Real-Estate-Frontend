@@ -12,7 +12,7 @@ import RoleManagement from "../Pages/AdminScreen/RoleManagement/RoleManagement";
 import BlogPage from "../Pages/UserScreen/BlogPage/BlogPage";
 import EmployeeLayout from "../Components/Layout/EmployeeLayout";
 import BlogDetail from "../Pages/UserScreen/BlogDetail/BlogDetail";
-
+import AccountSetting from "../Pages/UserScreen/AccountSetting/AccountSetting";
 const AppRoute = () => {
   return (
     <Routes>
@@ -24,6 +24,7 @@ const AppRoute = () => {
       <Route element={<EmployeeLayout />}>
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/blogs/:blogId" element={<BlogDetail />} />
+        <Route path="/employee/account-settings" element={<AccountSetting />} />
       </Route>
 
       {/* Admin Routes */}

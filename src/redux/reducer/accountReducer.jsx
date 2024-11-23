@@ -16,7 +16,7 @@ const INITIAL_STATE = {
     first_name: "",
     last_name: "",
     phone: "",
-    sex: "",
+    address: "",
     roleWithPermission: {},
   },
   isLoading: false,
@@ -65,6 +65,8 @@ const accountReducer = (state = INITIAL_STATE, action) => {
           email: "",
           first_name: "",
           last_name: "",
+          phone: "",
+          address: "",
           roleWithPermission: {},
         },
       };
