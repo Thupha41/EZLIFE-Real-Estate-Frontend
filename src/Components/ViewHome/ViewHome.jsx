@@ -1,8 +1,8 @@
 import home from "../../assets/LandingPage/home.png";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import { CiClock1 } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { MdArrowOutward } from "react-icons/md";
+
 const ViewHome = () => {
   const projects = [
     {
@@ -44,55 +44,87 @@ const ViewHome = () => {
   ];
 
   return (
-    <div data-aos="fade-up" className="py-10">
-      <h2 className="text-4xl font-bold text-left mb-6 ml-8">
-        Latest Listed Projects
-      </h2>
-      <div className="flex justify-between items-center my-10 ml-8">
-        <div className="flex space-x-4 text-lg text-gray-600">
-          <span className="text-tertiary underline">New to market</span>
-          <span>Nature Nearby</span>
-          <span>Most viewed homes</span>
-        </div>
-        <button className=" flex items-center text-[#3A0CA3] border border-[#3A0CA3] px-4 py-2 mr-10 rounded-full">
-          District
-          <MdKeyboardArrowDown className="text-gray-700 text-xl" />
-        </button>
-      </div>
+    <div data-aos="fade-up" className="py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8">Latest Listed Projects</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-8">
-        {projects.map((project, index) => (
-          <div key={index} className="border-t  p-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">{project.price}</h3>
-              <button className="flex font-bold text-white bg-tertiary px-4 py-2 rounded-full ml-auto">
-                FOR SALE
-              </button>
-            </div>
-            <div className="flex justify-between">
-              <p className="my-4">{project.details}</p>
-              <div className="flex items-center">
-                <CiClock1 className="mr-2" />
-                <p className="text-gray-400">{project.age}</p>
+        {/* Filter Tabs */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex gap-6">
+            <button className="text-tertiary border-b-2 border-tertiary pb-2">
+              New to market
+            </button>
+            <button className="text-gray-500 hover:text-tertiary pb-2">
+              Nature Nearby
+            </button>
+            <button className="text-gray-500 hover:text-tertiary pb-2">
+              Most viewed homes
+            </button>
+          </div>
+          <select className="border border-[#3A0CA3] text-[#3A0CA3] rounded-full px-4 py-1 appearance-none pr-8 relative">
+            <option>District</option>
+          </select>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project, index) => (
+            <div key={index} className="group">
+              <div className="mb-4">
+                {/* Price and Status */}
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-[#B4925A] text-white px-3 py-1 rounded text-sm">
+                      {project.status}
+                    </span>
+                    <span className="font-semibold text-lg">
+                      {project.price}
+                    </span>
+                    {project.isNew && (
+                      <span className="text-sm text-gray-600">New</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Property Details */}
+                <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
+                  <span>{project.details}</span>
+                  <div className="flex items-center gap-1">
+                    <CiClock1 />
+                    <span>{project.age}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Property Image */}
+              <div className="relative mb-4">
+                <img
+                  src={home}
+                  alt={project.address}
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+                <button className="absolute top-4 right-4 p-2 bg-white rounded-full hover:bg-gray-100">
+                  <CiHeart className="text-xl" />
+                </button>
+              </div>
+
+              {/* Address */}
+              <div>
+                <h3 className="text-[#27563A] hover:underline cursor-pointer">
+                  {project.address}
+                </h3>
+                <p className="text-gray-600">{project.location}</p>
               </div>
             </div>
-            <img
-              src={home}
-              alt="Project"
-              className="w-full h-96 object-cover mb-4"
-            />
-            <div className="flex justify-between">
-              <p className="text-[#27563A] underline">{project.address}</p>
-              <CiHeart className="text-gray-400" />
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center mt-10">
-        <button className="flex items-center text-white bg-tertiary px-4 py-2 rounded-full">
-          Browse Now
-          <MdArrowOutward className="text-white ml-1 text-lg" />
-        </button>
+          ))}
+        </div>
+
+        {/* Browse More Button */}
+        <div className="flex justify-center mt-12">
+          <button className="bg-tertiary text-white px-6 py-2 rounded-full flex items-center gap-2">
+            Browse Now <MdArrowOutward />
+          </button>
+        </div>
       </div>
     </div>
   );

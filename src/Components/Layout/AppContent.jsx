@@ -23,7 +23,13 @@ const AppContent = ({ firstRenderRef }) => {
     "/employee/account-settings",
   ];
 
-  const employeePaths = ["/blogs", "/blogs/"];
+  const employeePaths = [
+    "/blogs",
+    "/blogs/",
+    "/services",
+    "/about-us",
+    "/consultant",
+  ];
 
   useEffect(() => {
     const checkAuth = async () => {

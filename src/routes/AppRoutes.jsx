@@ -13,6 +13,9 @@ import BlogPage from "../Pages/UserScreen/BlogPage/BlogPage";
 import EmployeeLayout from "../Components/Layout/EmployeeLayout";
 import BlogDetail from "../Pages/UserScreen/BlogDetail/BlogDetail";
 import AccountSetting from "../Pages/UserScreen/AccountSetting/AccountSetting";
+import ServicePage from "../Pages/UserScreen/ServicePage/ServicePage";
+import AboutUsPage from "../Pages/UserScreen/AboutUsPage/AboutUsPage";
+import ConsultantPage from "../Pages/UserScreen/ConsultantPage/ConsultantPage";
 const AppRoute = () => {
   return (
     <Routes>
@@ -25,6 +28,9 @@ const AppRoute = () => {
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/blogs/:blogId" element={<BlogDetail />} />
         <Route path="/employee/account-settings" element={<AccountSetting />} />
+        <Route path="/services" element={<ServicePage />} />
+        <Route path="/about-us" element={<AboutUsPage />} />
+        <Route path="/consultant" element={<ConsultantPage />} />
       </Route>
 
       {/* Admin Routes */}
