@@ -26,7 +26,7 @@ const LoginWithSSO = () => {
           navigate("/admin", { replace: true });
           break;
         case "employee":
-          navigate("/employee", { replace: true });
+          navigate("/", { replace: true });
           break;
         default:
           navigate("/", { replace: true });

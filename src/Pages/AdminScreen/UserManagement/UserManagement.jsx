@@ -128,12 +128,11 @@ const UserManagement = () => {
     form.resetFields();
 
     form.setFieldsValue({
-      username: user.username || "",
+      first_name: user.first_name || "",
+      last_name: user.last_name || "",
       email: user.email || "",
       phone: user.phone || "",
-      firstName: user.first_name || "",
-      lastName: user.last_name || "",
-      sex: user.sex || "",
+      address: user.address || "",
       roleId: user.Role?.id || "",
       typeLogin: user.typeLogin || "local",
     });
@@ -216,12 +215,6 @@ const UserManagement = () => {
       fixed: "left",
     },
     {
-      title: "Username",
-      dataIndex: "username",
-      key: "username",
-      width: 150,
-    },
-    {
       title: "Email",
       dataIndex: "email",
       key: "email",
@@ -235,21 +228,21 @@ const UserManagement = () => {
     },
     {
       title: "First Name",
-      dataIndex: "firstName",
-      key: "firstName",
+      dataIndex: "first_name",
+      key: "first_name",
       width: 250,
     },
     {
       title: "Last Name",
-      dataIndex: "lastName",
-      key: "lastName",
+      dataIndex: "last_name",
+      key: "last_name",
       width: 250,
     },
     {
-      title: "Sex",
-      dataIndex: "sex",
-      key: "sex",
-      width: 100,
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+      width: 250,
     },
     {
       title: "Role",
@@ -376,8 +369,15 @@ const UserManagement = () => {
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
               <div className="grid grid-cols-2 gap-4">
                 <Form.Item
-                  name="username"
-                  label="Username"
+                  name="first_name"
+                  label="First Name"
+                  rules={[{ required: true }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name="last_name"
+                  label="Last Name"
                   rules={[{ required: true }]}
                 >
                   <Input />
@@ -406,13 +406,6 @@ const UserManagement = () => {
                 </Form.Item>
                 <Form.Item name="address" label="Address">
                   <Input />
-                </Form.Item>
-                <Form.Item name="sex" label="Sex">
-                  <Select>
-                    <Select.Option value="male">Male</Select.Option>
-                    <Select.Option value="female">Female</Select.Option>
-                    <Select.Option value="other">Other</Select.Option>
-                  </Select>
                 </Form.Item>
                 <Form.Item
                   name="roleId"

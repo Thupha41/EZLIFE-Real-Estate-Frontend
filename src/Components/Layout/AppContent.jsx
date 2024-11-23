@@ -20,6 +20,7 @@ const AppContent = ({ firstRenderRef }) => {
     "/admin/dashboard",
     "/admin/permissions",
     "/admin/roles",
+    "/employee/account-settings",
   ];
 
   const employeePaths = ["/blogs", "/blogs/"];

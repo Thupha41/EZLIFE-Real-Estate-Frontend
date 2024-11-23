@@ -9,45 +9,31 @@ import { MdArrowOutward } from "react-icons/md";
 import consultant1 from "../../assets/LandingPage/consultant1.png";
 import consultant2 from "../../assets/LandingPage/consultant2.png";
 import consultant3 from "../../assets/LandingPage/consultant3.png";
-
+import Banner from "../../Components/Banner/Banner";
 const LandingPage = () => {
   return (
     <>
       <div>
-        <div
-          className="relative bg-cover bg-center min-h-screen w-full"
-          style={{
-            backgroundImage: `url(${heroBg})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-          <div className="relative z-10 flex flex-col justify-center items-center min-h-screen text-white text-center px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold mb-6 leading-tight">
-              Live Green, Live Luxuriously.
-            </h1>
-            <div className="flex flex-col sm:flex-row items-center w-full max-w-6xl gap-2">
-              <div className="relative w-full sm:w-auto">
-                <select className="w-full sm:w-auto p-2 rounded-lg sm:rounded-l-full sm:rounded-r-none border-none bg-gray-200 font-semibold text-black appearance-none pr-10">
-                  <option>For Sale</option>
-                  <option>For Rent</option>
-                  <option>Sold</option>
-                </select>
-                <MdKeyboardArrowDown className="text-2xl absolute right-4 top-1/2 transform -translate-y-1/2 text-black pointer-events-none" />
-              </div>
-              <input
-                type="text"
-                placeholder="Enter an address, city, neighborhood, or ZIP code."
-                className="w-full p-2 border-none bg-white text-black rounded-lg sm:rounded-none"
-              />
-              <button className="w-full sm:w-auto p-3 bg-[#9C8321] rounded-lg sm:rounded-l-none sm:rounded-r-full text-white flex items-center justify-center">
-                <GoSearch />
-              </button>
+        <Banner backgroundImage={heroBg} title="Live Green, Live Luxuriously.">
+          <div className="flex flex-col sm:flex-row items-center w-full max-w-6xl gap-2">
+            <div className="relative w-full sm:w-auto">
+              <select className="w-full sm:w-auto p-2 rounded-lg sm:rounded-l-full sm:rounded-r-none border-none bg-gray-200 font-semibold text-black appearance-none pr-10">
+                <option>For Sale</option>
+                <option>For Rent</option>
+                <option>Sold</option>
+              </select>
+              <MdKeyboardArrowDown className="text-2xl absolute right-4 top-1/2 transform -translate-y-1/2 text-black pointer-events-none" />
             </div>
+            <input
+              type="text"
+              placeholder="Enter an address, city, neighborhood, or ZIP code."
+              className="w-full p-2 border-none bg-white text-black rounded-lg sm:rounded-none"
+            />
+            <button className="w-full sm:w-auto p-3 bg-[#9C8321] rounded-lg sm:rounded-l-none sm:rounded-r-full text-white flex items-center justify-center">
+              <GoSearch />
+            </button>
           </div>
-        </div>
+        </Banner>
 
         {/* About Us Section */}
         <div

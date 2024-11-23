@@ -1,7 +1,7 @@
 import axios from "../../setup/axios";
 import { Modal } from "antd";
 import { createRoot } from "react-dom/client";
-
+import { PURGE } from "redux-persist";
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
@@ -54,8 +54,14 @@ export const doLogout = () => {
   return async (dispatch) => {
     dispatch({ type: LOGOUT_REQUEST });
     try {
-      const res = await axios.post("/logout");
+      const res = await axios.post("/auth/logout");
       if (res && +res.EC === 1) {
+        // Clear persisted states
+        dispatch({
+          type: PURGE,
+          key: "root",
+          result: () => null,
+        });
         // Logout success
         dispatch({ type: LOGOUT_SUCCESS });
       } else {
@@ -76,6 +82,13 @@ export const doGetAccount = () => {
       if (res && +res.EC === 1) {
         dispatch({ type: LOGIN_SUCCESS, user: res.DT });
       } else {
+        // Clear persisted states
+        dispatch({
+          type: PURGE,
+          key: "root",
+          result: () => null,
+        });
+
         dispatch({ type: LOGIN_FAILURE, error: res.EM });
 
         if (window.location.pathname !== "/") {
