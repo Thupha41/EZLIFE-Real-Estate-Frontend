@@ -13,7 +13,6 @@ const LoginWithSSO = () => {
     const ssoToken = searchParams.get("ssoToken");
     if (ssoToken && !runFirstRef.current) {
       runFirstRef.current = true;
-      sessionStorage.removeItem("lastPath");
       dispatch(doLogin(ssoToken));
     }
   }, [dispatch, searchParams]);
