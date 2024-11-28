@@ -1,16 +1,37 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogs } from "../../../redux/action/blogAction";
+import { getBlogs, getBlogImages } from "../../../redux/action/blogAction";
 import { BsGridFill, BsFillGrid3X3GapFill } from "react-icons/bs";
 import blogBanner from "../../../assets/LandingPage/blog-banner.png";
 import Banner from "../../../Components/Banner/Banner";
 import Breadcrumb from "../../../Components/Breadcrumb/Breadcrumb";
+
 const BlogPage = () => {
   const dispatch = useDispatch();
-  const { blogs = [], loading, error } = useSelector((state) => state.blog);
+  const {
+    blogs = [],
+    loading,
+    error,
+    blogImages = [],
+  } = useSelector((state) => state.blog);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(6); // Number of posts to show per page
   const [gridViewActive, setGridViewActive] = useState(true);
   const [listViewActive, setListViewActive] = useState(false);
+
+  // Get the featured blog (always first blog)
+  const featuredBlog = blogs[0] || null;
+  // Get remaining blogs (excluding featured blog)
+  const remainingBlogs = blogs.slice(1);
+
+  // Calculate pagination for remaining blogs only
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = remainingBlogs.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(remainingBlogs.length / postsPerPage);
 
   const toggleGridView = () => {
     setGridViewActive(true);
@@ -32,10 +53,18 @@ const BlogPage = () => {
     dispatch(getBlogs());
   }, [dispatch]);
 
-  // Get the first blog for featured section
-  const featuredBlog = blogs[0] || null;
-  // Get remaining blogs
-  const remainingBlogs = blogs.slice(1);
+  useEffect(() => {
+    if (blogs && blogs.length > 0) {
+      blogs.forEach((blog) => {
+        dispatch(getBlogImages(blog.id));
+      });
+    }
+  }, [dispatch, blogs]);
+
+  const getBlogImageUrl = (blogId) => {
+    const blogImage = blogImages.find((img) => img.post === blogId);
+    return blogImage?.image_url || "/default-thumbnail.jpg";
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -44,10 +73,6 @@ const BlogPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <Breadcrumb />
       </div>
-      {/* Page Title */}
-      <h1 className="text-4xl font-bold text-center mb-12">
-        Discover latest blogs
-      </h1>
 
       {loading ? (
         <div className="flex justify-center items-center min-h-[200px]">
@@ -59,13 +84,13 @@ const BlogPage = () => {
         </div>
       ) : (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Featured Blog */}
+          {/* Featured Blog - Always first blog */}
           {featuredBlog && (
             <div className="mb-12">
               <div className="grid md:grid-cols-2 gap-8 bg-white rounded-xl overflow-hidden shadow-lg">
                 <div className="relative h-[400px] overflow-hidden">
                   <img
-                    src={featuredBlog.thumbnail || "/default-thumbnail.jpg"}
+                    src={getBlogImageUrl(featuredBlog.id)}
                     alt={featuredBlog.title}
                     className="w-full h-full object-cover"
                   />
@@ -135,7 +160,7 @@ const BlogPage = () => {
             </div>
           </div>
 
-          {/* Remaining Blogs Grid */}
+          {/* Remaining Blogs Grid - Paginated */}
           <div
             className={`grid grid-cols-1 ${
               gridViewActive
@@ -143,14 +168,14 @@ const BlogPage = () => {
                 : "md:grid-cols-2 lg:grid-cols-3"
             } gap-6`}
           >
-            {remainingBlogs.map((blog) => (
+            {currentPosts.map((blog) => (
               <div
                 key={blog.id}
                 className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
-                    src={blog.thumbnail || "/default-thumbnail.jpg"}
+                    src={getBlogImageUrl(blog.id)}
                     alt={blog.title}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   />
@@ -191,6 +216,64 @@ const BlogPage = () => {
               </div>
             ))}
           </div>
+
+          {/* Pagination */}
+          {remainingBlogs.length > postsPerPage && (
+            <div className="flex justify-center items-center space-x-4 mt-8">
+              <button
+                onClick={() => {
+                  if (currentPage > 1) {
+                    setCurrentPage((prev) => prev - 1);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-md ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-primary text-white hover:bg-primary-dark"
+                }`}
+              >
+                Previous
+              </button>
+
+              <div className="flex space-x-2">
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index + 1}
+                    onClick={() => {
+                      setCurrentPage(index + 1);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className={`w-8 h-8 rounded-md ${
+                      currentPage === index + 1
+                        ? "bg-primary text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  if (currentPage < totalPages) {
+                    setCurrentPage((prev) => prev + 1);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded-md ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-primary text-white hover:bg-primary-dark"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

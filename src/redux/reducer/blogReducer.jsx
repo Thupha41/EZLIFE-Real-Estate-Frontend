@@ -8,6 +8,9 @@ import {
   UPLOAD_BLOG_IMAGE_REQUEST,
   UPLOAD_BLOG_IMAGE_SUCCESS,
   UPLOAD_BLOG_IMAGE_FAILURE,
+  GET_BLOG_IMAGES_REQUEST,
+  GET_BLOG_IMAGES_SUCCESS,
+  GET_BLOG_IMAGES_FAILURE,
 } from "../action/blogAction";
 
 const initialState = {
@@ -18,7 +21,9 @@ const initialState = {
   createError: null,
   uploadImageLoading: false,
   uploadImageError: null,
-  blogImages: {},
+  blogImages: [],
+  blogImagesLoading: false,
+  blogImagesError: null,
 };
 
 const blogReducer = (state = initialState, action) => {
@@ -90,6 +95,33 @@ const blogReducer = (state = initialState, action) => {
         ...state,
         uploadImageLoading: false,
         uploadImageError: action.payload,
+      };
+
+    case GET_BLOG_IMAGES_REQUEST:
+      return {
+        ...state,
+        blogImagesLoading: true,
+        blogImagesError: null,
+      };
+
+    case GET_BLOG_IMAGES_SUCCESS:
+      return {
+        ...state,
+        blogImagesLoading: false,
+        blogImages: [
+          ...state.blogImages.filter(
+            (img) => !action.payload.some((newImg) => newImg.id === img.id)
+          ),
+          ...action.payload,
+        ],
+        blogImagesError: null,
+      };
+
+    case GET_BLOG_IMAGES_FAILURE:
+      return {
+        ...state,
+        blogImagesLoading: false,
+        blogImagesError: action.payload,
       };
 
     default:
