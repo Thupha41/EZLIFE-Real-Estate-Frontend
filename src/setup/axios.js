@@ -8,9 +8,10 @@ export const injectStore = (_store) => {
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_API,
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // headers: {
+  //   "Content-Type": "application/json",
+  //   "Access-Control-Allow-Credentials": true,
+  // },
 });
 
 axiosRetry(instance, {
@@ -28,6 +29,7 @@ instance.interceptors.request.use(
   function (config) {
     const state = store.getState();
     const token = state.account?.userInfo?.access_token ?? "";
+    // config.headers["Access-Control-Allow-Credentials"] = true;
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }

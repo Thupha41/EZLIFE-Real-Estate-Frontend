@@ -13,6 +13,10 @@ export const UPLOAD_BLOG_IMAGE_REQUEST = "UPLOAD_BLOG_IMAGE_REQUEST";
 export const UPLOAD_BLOG_IMAGE_SUCCESS = "UPLOAD_BLOG_IMAGE_SUCCESS";
 export const UPLOAD_BLOG_IMAGE_FAILURE = "UPLOAD_BLOG_IMAGE_FAILURE";
 
+export const GET_BLOG_IMAGES_REQUEST = "GET_BLOG_IMAGES_REQUEST";
+export const GET_BLOG_IMAGES_SUCCESS = "GET_BLOG_IMAGES_SUCCESS";
+export const GET_BLOG_IMAGES_FAILURE = "GET_BLOG_IMAGES_FAILURE";
+
 export const getBlogPost = () => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOGS_REQUEST });
@@ -144,6 +148,40 @@ export const uploadBlogImage = (postId, imageData) => async (dispatch) => {
     return {
       success: false,
       error: error.response?.data?.message || "Failed to upload image",
+    };
+  }
+};
+
+export const getBlogImages = (postId) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_BLOG_IMAGES_REQUEST });
+
+    const response = await axios.get(
+      `${
+        import.meta.env.VITE_BACKEND_SERVICE_URL
+      }/blogs/posts/${postId}/images/`
+    );
+
+    if (response) {
+      dispatch({
+        type: GET_BLOG_IMAGES_SUCCESS,
+        payload: response,
+      });
+    } else {
+      throw new Error("Invalid response format");
+    }
+
+    return { success: true, data: response };
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    dispatch({
+      type: GET_BLOG_IMAGES_FAILURE,
+      payload: error.message || "Failed to fetch blog posts",
+    });
+
+    return {
+      success: false,
+      error: error.message || "Failed to fetch blog posts",
     };
   }
 };
