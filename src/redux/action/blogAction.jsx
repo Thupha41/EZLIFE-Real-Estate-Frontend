@@ -46,7 +46,7 @@ export const getBlogPost = () => async (dispatch) => {
     dispatch({ type: GET_BLOGS_REQUEST });
 
     const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_SERVICE_URL}/blogs/posts/`
+      `https://blog.ezgroups.com.vn/api/v1/blogs/posts/`
     );
     dispatch({
       type: GET_BLOGS_SUCCESS,
@@ -73,7 +73,7 @@ export const createBlogPost = (blogData) => async (dispatch) => {
     dispatch({ type: CREATE_BLOG_REQUEST });
 
     const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_SERVICE_URL}/blogs/posts/create-post/`,
+      `https://blog.ezgroups.com.vn/api/v1/blogs/posts/create-post/`,
       blogData
     );
 
@@ -108,7 +108,7 @@ export const getBlogs = () => async (dispatch) => {
     dispatch({ type: GET_BLOGS_REQUEST });
 
     const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_SERVICE_URL}/blogs/posts/`
+      `https://blog.ezgroups.com.vn/api/v1/blogs/posts/`
     );
 
     // Add this check to ensure we're getting the correct data
@@ -379,7 +379,7 @@ export const deleteBlog = (postId) => async (dispatch) => {
     dispatch({ type: DELETE_BLOG_REQUEST });
 
     await axios.delete(
-      `${import.meta.env.VITE_BACKEND_SERVICE_URL}/blogs/posts/${postId}/`
+      `https://blog.ezgroups.com.vn/api/v1/blogs/posts/${postId}/`
     );
 
     dispatch({
