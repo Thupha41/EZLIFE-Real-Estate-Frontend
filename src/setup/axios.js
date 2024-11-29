@@ -8,10 +8,14 @@ export const injectStore = (_store) => {
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_SERVICE_URL,
   withCredentials: true,
-  // headers: {
-  //   "Content-Type": "application/json",
-  //   "Access-Control-Allow-Credentials": true,
-  // },
+  headers: {
+    "Content-Type": "application/json",
+    // Add these CORS headers
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    "Access-Control-Allow-Headers":
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  },
 });
 
 axiosRetry(instance, {
