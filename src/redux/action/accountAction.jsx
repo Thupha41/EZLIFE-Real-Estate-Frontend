@@ -34,7 +34,7 @@ export const doLogin = (ssoToken) => {
   return async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
     try {
-      const res = await axios.post(import.meta.env.VITE_BACKEND_VERIFY_TOKEN, {
+      const res = await axios.post("https://sso.ezgroups.com.vn/verify-token", {
         ssoToken,
       });
       if (res && +res.EC === 1) {
