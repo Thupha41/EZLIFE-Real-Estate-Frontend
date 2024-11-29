@@ -6,7 +6,7 @@ export const injectStore = (_store) => {
 };
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_API,
+  baseURL: import.meta.env.VITE_BACKEND_SERVICE_URL,
   withCredentials: true,
   // headers: {
   //   "Content-Type": "application/json",
