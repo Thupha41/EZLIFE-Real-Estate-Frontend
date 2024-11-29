@@ -45,9 +45,7 @@ export const getBlogPost = () => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOGS_REQUEST });
 
-    const response = await axios.get(
-      `https://blog.ezgroups.com.vn/api/v1/blogs/posts/`
-    );
+    const response = await axios.get(`/blogs/posts/`);
     dispatch({
       type: GET_BLOGS_SUCCESS,
       payload: response.data,
@@ -72,10 +70,7 @@ export const createBlogPost = (blogData) => async (dispatch) => {
   try {
     dispatch({ type: CREATE_BLOG_REQUEST });
 
-    const response = await axios.post(
-      `https://blog.ezgroups.com.vn/api/v1/blogs/posts/create-post/`,
-      blogData
-    );
+    const response = await axios.post(`/blogs/posts/create-post/`, blogData);
 
     console.log("Full API Response:", response);
     console.log("Response data:", response.DT);
@@ -107,9 +102,7 @@ export const getBlogs = () => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOGS_REQUEST });
 
-    const response = await axios.get(
-      `https://blog.ezgroups.com.vn/api/v1/blogs/posts/`
-    );
+    const response = await axios.get(`/blogs/posts/`);
 
     // Add this check to ensure we're getting the correct data
     if (response) {
@@ -146,9 +139,7 @@ export const uploadBlogImage = (postId, imageData) => async (dispatch) => {
     formData.append("label", imageData.label || "");
 
     const response = await axios.post(
-      `${
-        import.meta.env.VITE_BACKEND_SERVICE_URL
-      }/blogs/posts/${postId}/images/upload/`,
+      `/blogs/posts/${postId}/images/upload/`,
       formData,
       {
         headers: {
@@ -180,11 +171,7 @@ export const getBlogImages = (postId) => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOG_IMAGES_REQUEST });
 
-    const response = await axios.get(
-      `${
-        import.meta.env.VITE_BACKEND_SERVICE_URL
-      }/blogs/posts/${postId}/images/`
-    );
+    const response = await axios.get(`/blogs/posts/${postId}/images/`);
 
     if (response) {
       dispatch({
@@ -214,11 +201,7 @@ export const getBlogDetail = (postId) => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOG_DETAIL_REQUEST });
 
-    const response = await axios.get(
-      `${
-        import.meta.env.VITE_BACKEND_SERVICE_URL
-      }/blogs/posts/${postId}/details/`
-    );
+    const response = await axios.get(`/blogs/posts/${postId}/details/`);
 
     if (response) {
       dispatch({
@@ -248,9 +231,7 @@ export const createComment = (postId, commentData) => async (dispatch) => {
     dispatch({ type: CREATE_COMMENT_REQUEST });
 
     const response = await axios.post(
-      `${
-        import.meta.env.VITE_BACKEND_SERVICE_URL
-      }/blogs/posts/${postId}/comments/create/`,
+      `/blogs/posts/${postId}/comments/create/`,
       commentData
     );
 
@@ -281,11 +262,7 @@ export const getComments = (postId) => async (dispatch) => {
   try {
     dispatch({ type: GET_COMMENTS_REQUEST });
 
-    const response = await axios.get(
-      `${
-        import.meta.env.VITE_BACKEND_SERVICE_URL
-      }/blogs/posts/${postId}/comments/`
-    );
+    const response = await axios.get(`/blogs/posts/${postId}/comments/`);
 
     if (response?.data) {
       dispatch({
@@ -314,11 +291,7 @@ export const deleteComment = (postId, commentId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_COMMENT_REQUEST });
 
-    await axios.delete(
-      `${
-        import.meta.env.VITE_BACKEND_SERVICE_URL
-      }/blogs/posts/${postId}/comment/${commentId}/`
-    );
+    await axios.delete(`/blogs/posts/${postId}/comment/${commentId}/`);
 
     dispatch({
       type: DELETE_COMMENT_SUCCESS,
@@ -345,9 +318,7 @@ export const updateComment =
       dispatch({ type: UPDATE_COMMENT_REQUEST });
 
       const response = await axios.put(
-        `${
-          import.meta.env.VITE_BACKEND_SERVICE_URL
-        }/blogs/posts/${postId}/comment/${commentId}/`,
+        `/blogs/posts/${postId}/comment/${commentId}/`,
         commentData
       );
 
@@ -378,9 +349,7 @@ export const deleteBlog = (postId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_BLOG_REQUEST });
 
-    await axios.delete(
-      `https://blog.ezgroups.com.vn/api/v1/blogs/posts/${postId}/`
-    );
+    await axios.delete(`/blogs/posts/${postId}/`);
 
     dispatch({
       type: DELETE_BLOG_SUCCESS,
