@@ -34,9 +34,12 @@ export const doLogin = (ssoToken) => {
   return async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
     try {
-      const res = await axios.post("https://sso.ezgroups.com.vn/verify-token", {
-        ssoToken,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_VERIFY_TOKEN}`,
+        {
+          ssoToken,
+        }
+      );
       if (res && +res.EC === 1) {
         dispatch({ type: LOGIN_SUCCESS, user: res.DT });
         dispatch(doGetAccount());
@@ -54,7 +57,9 @@ export const doLogout = () => {
   return async (dispatch) => {
     dispatch({ type: LOGOUT_REQUEST });
     try {
-      const res = await axios.post("/auth/logout");
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/auth/logout`
+      );
       if (res && +res.EC === 1) {
         // Clear persisted states
         dispatch({
@@ -78,7 +83,9 @@ export const doGetAccount = () => {
   return async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
     try {
-      const res = await axios.get("/users/account");
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_API}/users/account`
+      );
       if (res && +res.EC === 1) {
         dispatch({ type: LOGIN_SUCCESS, user: res.DT });
       } else {
