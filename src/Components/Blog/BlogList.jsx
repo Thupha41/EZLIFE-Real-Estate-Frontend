@@ -23,6 +23,11 @@ const BlogList = () => {
   const userBlogs =
     blogs?.filter((blog) => blog.user_id === userInfo?.user_id) || [];
 
+  // Find matching blog image
+  const getBlogImage = (blogId) => {
+    return blogImages?.find((img) => img.post === blogId);
+  };
+
   if (loading) return <div>Loading...</div>;
 
   const getCategoryLabel = (category) => {
@@ -61,42 +66,45 @@ const BlogList = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {userBlogs.map((blog) => (
-              <tr key={blog.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">
-                  {blogImages && blogImages[blog.id]?.length > 0 ? (
-                    <img
-                      src={blogImages[blog.id][0].image_url}
-                      alt={blog.title}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
-                      <span className="text-gray-400 text-xs">No image</span>
-                    </div>
-                  )}
-                </td>
-                <td className="px-6 py-4">
-                  <div className="line-clamp-2 break-words">{blog.title}</div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    {getCategoryLabel(blog.category)}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {new Date(blog.created_at).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button className="text-blue-600 hover:text-blue-800 mr-2 text-sm font-medium">
-                    Edit
-                  </button>
-                  <button className="text-red-600 hover:text-red-800 text-sm font-medium">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {userBlogs.map((blog) => {
+              const blogImage = getBlogImage(blog.id);
+              return (
+                <tr key={blog.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">
+                    {blogImage ? (
+                      <img
+                        src={blogImage.image_url}
+                        alt={blogImage.label}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
+                        <span className="text-gray-400 text-xs">No image</span>
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="line-clamp-2 break-words">{blog.title}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      {getCategoryLabel(blog.category)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {new Date(blog.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button className="text-blue-600 hover:text-blue-800 mr-2 text-sm font-medium">
+                      Edit
+                    </button>
+                    <button className="text-red-600 hover:text-red-800 text-sm font-medium">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
             {userBlogs.length === 0 && (
               <tr>
                 <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
