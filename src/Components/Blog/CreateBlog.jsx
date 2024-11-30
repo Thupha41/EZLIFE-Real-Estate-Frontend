@@ -66,7 +66,7 @@ const CreateBlog = () => {
           // Upload images sequentially
           for (const file of files) {
             const imageData = {
-              file: file, // Make sure to pass the actual File object
+              file: file,
               label: labels || file.name,
             };
 
@@ -146,16 +146,6 @@ const CreateBlog = () => {
         Create New Blog Post
       </h2>
       <form className="space-y-8" onSubmit={handleSubmit}>
-        {/* Author Info Display */}
-        {user && (
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="text-sm text-gray-600">
-              Author: {user.first_name} {user.last_name}
-            </p>
-            <p className="text-sm text-gray-600">Email: {user.email}</p>
-          </div>
-        )}
-
         {/* Title Input */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -181,10 +171,11 @@ const CreateBlog = () => {
             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="">Select a category</option>
+            <option value="feng-shui">Feng Shui</option>
             <option value="real-estate">Real Estate</option>
-            <option value="property-investment">Property Investment</option>
-            <option value="market-analysis">Market Analysis</option>
-            <option value="home-improvement">Home Improvement</option>
+            <option value="knowledge">Knowledge</option>
+            <option value="contract">Contract Templates</option>
+            <option value="summary">Miscellaneous</option>
           </select>
         </div>
 
