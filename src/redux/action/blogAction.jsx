@@ -206,9 +206,9 @@ export const getBlogDetail = (postId) => async (dispatch) => {
     if (response) {
       dispatch({
         type: GET_BLOG_DETAIL_SUCCESS,
-        payload: response,
+        payload: response.DT,
       });
-      return { success: true, data: response };
+      return { success: true, data: response.DT };
     } else {
       throw new Error("Invalid response format");
     }

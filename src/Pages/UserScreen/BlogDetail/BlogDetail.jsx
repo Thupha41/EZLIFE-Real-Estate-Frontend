@@ -30,6 +30,10 @@ const BlogDetail = () => {
     fetchBlogData();
   }, [dispatch, blogId]);
 
+  // Filter images that match the current post ID
+  const postImages =
+    blogImages?.filter((img) => img.post === parseInt(blogId)) || [];
+
   const handleSubmitComment = (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
@@ -40,7 +44,11 @@ const BlogDetail = () => {
   if (blogDetailLoading) return <div>Loading...</div>;
   if (blogDetailError) return <div>Error: {blogDetailError}</div>;
   if (!blogDetail) return <div>No blog found</div>;
-
+  const stripHtmlTags = (html) => {
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -48,10 +56,10 @@ const BlogDetail = () => {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
             {/* Display the first blog image if available */}
-            {!blogImagesLoading && blogImages?.length > 0 && (
+            {!blogImagesLoading && postImages.length > 0 && (
               <img
-                src={blogImages[0].file_url}
-                alt={blogDetail.title}
+                src={postImages[0].image_url}
+                alt={`${blogDetail.title} - ${postImages[0].label}`}
                 className="w-full h-[400px] object-cover"
               />
             )}
@@ -64,7 +72,9 @@ const BlogDetail = () => {
                   {new Date(blogDetail.created_at).toLocaleDateString()}
                 </span>
               </div>
-              <div className="prose max-w-none">{blogDetail.content}</div>
+              <div className="prose max-w-none">
+                {stripHtmlTags(blogDetail.content)}
+              </div>
 
               {/* Social Share */}
               <div className="mt-8 pt-6 border-t">
