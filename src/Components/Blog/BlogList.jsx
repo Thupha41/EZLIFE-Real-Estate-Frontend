@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getBlogs, getBlogImages } from "../../redux/action/blogAction";
 
 const BlogList = () => {
   const dispatch = useDispatch();
-  const { blogs, loading } = useSelector((state) => state.blog);
+  const { blogs, loading, blogImages } = useSelector((state) => state.blog);
   const { userInfo } = useSelector((state) => state.account);
-  const [blogImages, setBlogImages] = useState({});
 
   useEffect(() => {
     dispatch(getBlogs());
@@ -14,25 +13,11 @@ const BlogList = () => {
 
   // Fetch images for each blog post
   useEffect(() => {
-    const fetchBlogImages = async () => {
-      if (blogs?.length > 0) {
-        const imagesPromises = blogs.map((blog) =>
-          dispatch(getBlogImages(blog.id))
-        );
-        const imagesResults = await Promise.all(imagesPromises);
-
-        // Create an object with blog_id as key and images as value
-        const imagesMap = {};
-        imagesResults.forEach((result, index) => {
-          if (result.success) {
-            imagesMap[blogs[index].id] = result.data;
-          }
-        });
-        setBlogImages(imagesMap);
-      }
-    };
-
-    fetchBlogImages();
+    if (blogs?.length > 0) {
+      blogs.forEach((blog) => {
+        dispatch(getBlogImages(blog.id));
+      });
+    }
   }, [blogs, dispatch]);
 
   const userBlogs =
@@ -79,9 +64,9 @@ const BlogList = () => {
             {userBlogs.map((blog) => (
               <tr key={blog.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4">
-                  {blogImages[blog.id]?.length > 0 ? (
+                  {blogImages && blogImages[blog.id]?.length > 0 ? (
                     <img
-                      src={blogImages[blog.id][0].file_url}
+                      src={blogImages[blog.id][0].image_url}
                       alt={blog.title}
                       className="w-16 h-16 object-cover rounded"
                     />
