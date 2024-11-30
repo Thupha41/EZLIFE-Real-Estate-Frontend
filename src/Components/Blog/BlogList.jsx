@@ -1,11 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogs, getBlogImages } from "../../redux/action/blogAction";
+import {
+  getBlogs,
+  getBlogImages,
+  updateBlog,
+} from "../../redux/action/blogAction";
+import { Modal, Form, Input, Select, message } from "antd";
+
+const { TextArea } = Input;
 
 const BlogList = () => {
   const dispatch = useDispatch();
-  const { blogs, loading, blogImages } = useSelector((state) => state.blog);
+  const { blogs, loading, blogImages, updateBlogLoading } = useSelector(
+    (state) => state.blog
+  );
   const { userInfo } = useSelector((state) => state.account);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [editingBlog, setEditingBlog] = useState(null);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     dispatch(getBlogs());
@@ -26,6 +38,47 @@ const BlogList = () => {
   // Find matching blog image
   const getBlogImage = (blogId) => {
     return blogImages?.find((img) => img.post === blogId);
+  };
+
+  const handleEdit = (blog) => {
+    setEditingBlog(blog);
+    form.setFieldsValue({
+      title: blog.title,
+      content: blog.content,
+      category: blog.category,
+    });
+    setIsEditModalVisible(true);
+  };
+
+  const handleEditSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      const updateData = {
+        ...values,
+        user_id: userInfo.user_id,
+        user_email: userInfo.user_email,
+        user_name: userInfo.user_name,
+      };
+
+      const result = await dispatch(updateBlog(editingBlog.id, updateData));
+
+      if (result.success) {
+        message.success("Blog updated successfully");
+        setIsEditModalVisible(false);
+        setEditingBlog(null);
+        form.resetFields();
+      } else {
+        message.error("Failed to update blog");
+      }
+    } catch (error) {
+      console.error("Validation failed:", error);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditModalVisible(false);
+    setEditingBlog(null);
+    form.resetFields();
   };
 
   if (loading) return <div>Loading...</div>;
@@ -95,7 +148,10 @@ const BlogList = () => {
                     {new Date(blog.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button className="text-blue-600 hover:text-blue-800 mr-2 text-sm font-medium">
+                    <button
+                      onClick={() => handleEdit(blog)}
+                      className="text-blue-600 hover:text-blue-800 mr-2 text-sm font-medium"
+                    >
                       Edit
                     </button>
                     <button className="text-red-600 hover:text-red-800 text-sm font-medium">
@@ -115,6 +171,59 @@ const BlogList = () => {
           </tbody>
         </table>
       </div>
+
+      <Modal
+        title="Edit Blog Post"
+        open={isEditModalVisible}
+        onOk={handleEditSubmit}
+        onCancel={handleCancel}
+        confirmLoading={updateBlogLoading}
+        width={800}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={{
+            title: editingBlog?.title,
+            content: editingBlog?.content,
+            category: editingBlog?.category,
+          }}
+        >
+          <Form.Item
+            name="title"
+            label="Title"
+            rules={[{ required: true, message: "Please input the title!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="content"
+            label="Content"
+            rules={[{ required: true, message: "Please input the content!" }]}
+          >
+            <TextArea rows={6} />
+          </Form.Item>
+
+          <Form.Item
+            name="category"
+            label="Category"
+            rules={[{ required: true, message: "Please select a category!" }]}
+          >
+            <Select>
+              <Select.Option value="property-investment">
+                Real Estate
+              </Select.Option>
+              <Select.Option value="real-estate">Feng Shui</Select.Option>
+              <Select.Option value="market-analysis">Knowledge</Select.Option>
+              <Select.Option value="contract-templates">
+                Contract Templates
+              </Select.Option>
+              <Select.Option value="miscellaneous">Miscellaneous</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

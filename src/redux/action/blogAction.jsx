@@ -41,6 +41,10 @@ export const DELETE_BLOG_REQUEST = "DELETE_BLOG_REQUEST";
 export const DELETE_BLOG_SUCCESS = "DELETE_BLOG_SUCCESS";
 export const DELETE_BLOG_FAILURE = "DELETE_BLOG_FAILURE";
 
+export const UPDATE_BLOG_REQUEST = "UPDATE_BLOG_REQUEST";
+export const UPDATE_BLOG_SUCCESS = "UPDATE_BLOG_SUCCESS";
+export const UPDATE_BLOG_FAILURE = "UPDATE_BLOG_FAILURE";
+
 // Action Creators
 export const createBlogPost = (blogData) => async (dispatch) => {
   try {
@@ -342,6 +346,35 @@ export const deleteBlog = (postId) => async (dispatch) => {
     return {
       success: false,
       error: error.response?.data?.message || "Failed to delete blog",
+    };
+  }
+};
+
+export const updateBlog = (postId, blogData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_BLOG_REQUEST });
+
+    const response = await axios.put(`/blogs/posts/${postId}/`, blogData);
+    console.log("Response:", response);
+    if (response) {
+      dispatch({
+        type: UPDATE_BLOG_SUCCESS,
+        payload: response,
+      });
+      return { success: true, data: response };
+    } else {
+      throw new Error("Invalid response format");
+    }
+  } catch (error) {
+    console.error("Error updating blog:", error);
+    dispatch({
+      type: UPDATE_BLOG_FAILURE,
+      payload: error.response?.data?.message || "Failed to update blog post",
+    });
+
+    return {
+      success: false,
+      error: error.response?.data?.message || "Failed to update blog post",
     };
   }
 };

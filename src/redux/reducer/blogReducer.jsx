@@ -29,6 +29,9 @@ import {
   DELETE_BLOG_REQUEST,
   DELETE_BLOG_SUCCESS,
   DELETE_BLOG_FAILURE,
+  UPDATE_BLOG_REQUEST,
+  UPDATE_BLOG_SUCCESS,
+  UPDATE_BLOG_FAILURE,
 } from "../action/blogAction";
 
 const initialState = {
@@ -56,6 +59,8 @@ const initialState = {
   updateCommentError: null,
   deleteBlogLoading: false,
   deleteBlogError: null,
+  updateBlogLoading: false,
+  updateBlogError: null,
 };
 
 const blogReducer = (state = initialState, action) => {
@@ -312,6 +317,34 @@ const blogReducer = (state = initialState, action) => {
         ...state,
         deleteBlogLoading: false,
         deleteBlogError: action.payload,
+      };
+
+    case UPDATE_BLOG_REQUEST:
+      return {
+        ...state,
+        updateBlogLoading: true,
+        updateBlogError: null,
+      };
+
+    case UPDATE_BLOG_SUCCESS:
+      return {
+        ...state,
+        updateBlogLoading: false,
+        blogs: state.blogs.map((blog) =>
+          blog.id === action.payload.id ? action.payload : blog
+        ),
+        blogDetail:
+          state.blogDetail?.id === action.payload.id
+            ? action.payload
+            : state.blogDetail,
+        updateBlogError: null,
+      };
+
+    case UPDATE_BLOG_FAILURE:
+      return {
+        ...state,
+        updateBlogLoading: false,
+        updateBlogError: action.payload,
       };
 
     default:
