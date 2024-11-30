@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogPost } from "../../redux/action/blogAction";
+import { getBlogs } from "../../redux/action/blogAction";
 
 const BlogList = () => {
   const dispatch = useDispatch();
@@ -8,7 +8,7 @@ const BlogList = () => {
   const { userInfo } = useSelector((state) => state.account);
 
   useEffect(() => {
-    dispatch(getBlogPost());
+    dispatch(getBlogs());
   }, [dispatch]);
 
   // Add console logs to debug

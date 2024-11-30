@@ -41,30 +41,6 @@ export const DELETE_BLOG_REQUEST = "DELETE_BLOG_REQUEST";
 export const DELETE_BLOG_SUCCESS = "DELETE_BLOG_SUCCESS";
 export const DELETE_BLOG_FAILURE = "DELETE_BLOG_FAILURE";
 
-export const getBlogPost = () => async (dispatch) => {
-  try {
-    dispatch({ type: GET_BLOGS_REQUEST });
-
-    const response = await axios.get(`/blogs/posts/`);
-    dispatch({
-      type: GET_BLOGS_SUCCESS,
-      payload: response.data,
-    });
-
-    return { success: true, data: response.data };
-  } catch (error) {
-    dispatch({
-      type: GET_BLOGS_FAILURE,
-      payload: error.response?.data?.message || "Failed to fetch blog posts",
-    });
-
-    return {
-      success: false,
-      error: error.response?.data?.message || "Failed to fetch blog posts",
-    };
-  }
-};
-
 // Action Creators
 export const createBlogPost = (blogData) => async (dispatch) => {
   try {
