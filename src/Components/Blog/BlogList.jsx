@@ -4,15 +4,25 @@ import { getBlogPost } from "../../redux/action/blogAction";
 
 const BlogList = () => {
   const dispatch = useDispatch();
-  const { data: blogs, loading } = useSelector((state) => state.blog);
-  const { data: account } = useSelector((state) => state.account);
+  const { blogs, loading } = useSelector((state) => state.blog);
+  const { userInfo } = useSelector((state) => state.account);
 
   useEffect(() => {
     dispatch(getBlogPost());
   }, [dispatch]);
 
+  // Add console logs to debug
+  console.log("Current state:", {
+    blogs,
+    loading,
+    userInfo,
+  });
+
   // Filter blogs to show only the current user's blogs
-  const userBlogs = blogs?.filter((blog) => blog.user_id === account?.id) || [];
+  const userBlogs =
+    blogs?.filter((blog) => blog.user_id === userInfo?.user_id) || [];
+
+  console.log("Filtered blogs:", userBlogs);
 
   if (loading) return <div>Loading...</div>;
 
