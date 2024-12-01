@@ -252,7 +252,7 @@ export const getComments = (postId) => async (dispatch) => {
 
     const response = await axios.get(`/blogs/posts/${postId}/comments/`);
     console.log(">> check comments", response);
-    if (response?.data) {
+    if (response) {
       dispatch({
         type: GET_COMMENTS_SUCCESS,
         payload: response,
