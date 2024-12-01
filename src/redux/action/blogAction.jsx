@@ -50,7 +50,7 @@ export const createBlogPost = (blogData) => async (dispatch) => {
   try {
     dispatch({ type: CREATE_BLOG_REQUEST });
 
-    const response = await axios.post(`/blogs/posts/create-post/`, blogData);
+    const response = await axios.post(`/blogs/posts/create/`, blogData);
 
     console.log("Full API Response:", response);
     console.log("Response data:", response.DT);
