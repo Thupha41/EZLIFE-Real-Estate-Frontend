@@ -403,7 +403,7 @@ export const likePost = (postId, userData) => async (dispatch) => {
       user_name: userData.user_name,
       user_email: userData.user_email,
     });
-    console.log(response);
+
     if (response) {
       dispatch({
         type: LIKE_POST_SUCCESS,
@@ -413,19 +413,25 @@ export const likePost = (postId, userData) => async (dispatch) => {
         },
       });
       return { success: true, data: response };
-    } else {
-      throw new Error("Invalid response format");
     }
   } catch (error) {
-    console.error("Error liking post:", error);
+    // Check specifically for "already liked" error
+    if (error.response?.detail === "You have already liked this post.") {
+      return {
+        success: false,
+        error: "You have already liked this post",
+        alreadyLiked: true,
+      };
+    }
+
     dispatch({
       type: LIKE_POST_FAILURE,
-      payload: error.response?.data?.message || "Failed to like post",
+      payload: error.response || "Failed to like post",
     });
 
     return {
       success: false,
-      error: error.response?.data?.message || "Failed to like post",
+      error: error.response || "Failed to like post",
     };
   }
 };

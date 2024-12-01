@@ -104,21 +104,29 @@ const BlogDetail = () => {
 
     try {
       let result;
-      if (hasUserLiked()) {
+      const isCurrentlyLiked = hasUserLiked();
+
+      if (isCurrentlyLiked) {
+        // If already liked, try to unlike
         result = await dispatch(unlikePost(blogId, userData));
         if (result.success) {
           message.success("Post unliked successfully");
-          // Refresh likes after unlike
-          dispatch(getPostLikes(blogId));
+          await dispatch(getPostLikes(blogId)); // Refresh likes list
         } else {
           message.error(result.error || "Failed to unlike post");
         }
       } else {
+        // If not liked, try to like
         result = await dispatch(likePost(blogId, userData));
+
         if (result.success) {
           message.success("Post liked successfully");
-          // Refresh likes after like
-          dispatch(getPostLikes(blogId));
+          await dispatch(getPostLikes(blogId)); // Refresh likes list
+        } else if (result.alreadyLiked) {
+          // If server says already liked but our state doesn't show it,
+          // refresh the likes list to sync with server
+          await dispatch(getPostLikes(blogId));
+          message.warning("You have already liked this post");
         } else {
           message.error(result.error || "Failed to like post");
         }
@@ -126,6 +134,8 @@ const BlogDetail = () => {
     } catch (error) {
       console.error("Like/Unlike error:", error);
       message.error("Something went wrong");
+      // Refresh likes list to ensure UI is in sync with server
+      await dispatch(getPostLikes(blogId));
     }
   };
 
