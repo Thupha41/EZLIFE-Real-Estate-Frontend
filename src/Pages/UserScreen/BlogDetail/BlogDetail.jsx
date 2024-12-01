@@ -7,6 +7,7 @@ import {
   FaInstagram,
   FaHeart,
   FaRegHeart,
+  FaRegComment,
 } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
 import BlogItem from "../../../Components/Blog/BlogItem";
@@ -14,6 +15,8 @@ import {
   getBlogDetail,
   getBlogImages,
   likePost,
+  createComment,
+  getComments,
 } from "../../../redux/action/blogAction";
 import { message } from "antd";
 
@@ -30,6 +33,7 @@ const BlogDetail = () => {
     blogImages,
     blogImagesLoading,
     likePostLoading,
+    createCommentLoading,
   } = useSelector((state) => state.blog);
   const { userInfo } = useSelector((state) => state.account);
 
@@ -38,6 +42,7 @@ const BlogDetail = () => {
     const fetchBlogData = async () => {
       await dispatch(getBlogDetail(blogId));
       await dispatch(getBlogImages(blogId));
+      await dispatch(getComments(blogId));
     };
 
     fetchBlogData();
@@ -47,11 +52,31 @@ const BlogDetail = () => {
   const postImages =
     blogImages?.filter((img) => img.post === parseInt(blogId)) || [];
 
-  const handleSubmitComment = (e) => {
+  const handleSubmitComment = async (e) => {
     e.preventDefault();
+    if (!userInfo) {
+      message.error("Please login to comment");
+      return;
+    }
     if (!newComment.trim()) return;
-    // Comment submission logic will be added later
-    setNewComment("");
+
+    const commentData = {
+      user_id: userInfo.id,
+      user_name: userInfo.first_name + " " + userInfo.last_name,
+      user_email: userInfo.email,
+      content: newComment.trim(),
+    };
+
+    const result = await dispatch(createComment(blogId, commentData));
+
+    if (result.success) {
+      message.success("Comment posted successfully");
+      setNewComment("");
+      // Refresh comments after posting
+      dispatch(getComments(blogId));
+    } else {
+      message.error(result.error || "Failed to post comment");
+    }
   };
 
   const handleLikePost = async () => {
@@ -61,9 +86,9 @@ const BlogDetail = () => {
     }
 
     const userData = {
-      user_id: userInfo.user_id,
-      user_name: userInfo.user_name,
-      user_email: userInfo.user_email,
+      user_id: userInfo.id,
+      user_name: userInfo.first_name + " " + userInfo.last_name,
+      user_email: userInfo.email,
     };
 
     const result = await dispatch(likePost(blogId, userData));
@@ -101,18 +126,6 @@ const BlogDetail = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h1 className="text-3xl font-bold">{blogDetail.title}</h1>
-                <button
-                  onClick={handleLikePost}
-                  disabled={likePostLoading}
-                  className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors"
-                >
-                  {blogDetail.is_liked ? (
-                    <FaHeart className="text-red-500" size={24} />
-                  ) : (
-                    <FaRegHeart size={24} />
-                  )}
-                  <span>{blogDetail.likes_count || 0}</span>
-                </button>
               </div>
               <div className="flex items-center gap-4 text-sm text-gray-600 mb-6">
                 <span>By {blogDetail.user_name}</span>
@@ -142,8 +155,45 @@ const BlogDetail = () => {
             </div>
           </div>
 
-          {/* Comments Section */}
+          {/* Like and Comments Section */}
           <div className="bg-white rounded-lg shadow-md p-6">
+            {/* Stats Section */}
+            <div className="flex items-center gap-8 pb-6 mb-6 border-b border-gray-200">
+              <div className="flex items-center gap-2">
+                <FaHeart className="text-red-500" size={20} />
+                <span className="text-gray-700">
+                  <span className="font-semibold">
+                    {blogDetail.likes_count || 0}
+                  </span>{" "}
+                  likes
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaRegComment className="text-gray-500" size={20} />
+                <span className="text-gray-700">
+                  <span className="font-semibold">
+                    {blogDetail.comments_count || 0}
+                  </span>{" "}
+                  comments
+                </span>
+              </div>
+            </div>
+
+            {/* Like Button */}
+            <button
+              onClick={handleLikePost}
+              disabled={likePostLoading}
+              className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors mb-6"
+            >
+              {blogDetail.is_liked ? (
+                <FaHeart className="text-red-500" size={24} />
+              ) : (
+                <FaRegHeart size={24} />
+              )}
+              <span>Like this post</span>
+            </button>
+
+            {/* Comments Section Title */}
             <h2 className="text-xl font-bold mb-6">
               Comments ({blogDetail.comments_count || 0})
             </h2>
@@ -158,15 +208,25 @@ const BlogDetail = () => {
                   <textarea
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Add your comment..."
+                    placeholder={
+                      userInfo
+                        ? "Add your comment..."
+                        : "Please login to comment"
+                    }
+                    disabled={!userInfo || createCommentLoading}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary resize-none"
                     rows="3"
                   />
                   <button
                     type="submit"
-                    className="mt-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
+                    disabled={!userInfo || createCommentLoading}
+                    className={`mt-2 px-4 py-2 bg-primary text-white rounded-lg transition-colors ${
+                      !userInfo || createCommentLoading
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-opacity-90"
+                    }`}
                   >
-                    Post Comment
+                    {createCommentLoading ? "Posting..." : "Post Comment"}
                   </button>
                 </div>
               </div>
@@ -174,26 +234,32 @@ const BlogDetail = () => {
 
             {/* Comments List */}
             <div className="space-y-6">
-              {blogDetail.comments?.map((comment) => (
-                <div key={comment.id} className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                    <FaRegUser className="text-gray-500" />
-                  </div>
-                  <div className="flex-grow">
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-semibold">
-                          {comment.user_name}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {new Date(comment.created_at).toLocaleDateString()}
-                        </span>
+              {blogDetail.comments?.length === 0 ? (
+                <p className="text-gray-500 text-center">
+                  No comments yet. Be the first to comment!
+                </p>
+              ) : (
+                blogDetail.comments?.map((comment) => (
+                  <div key={comment.id} className="flex gap-4">
+                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                      <FaRegUser className="text-gray-500" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-semibold">
+                            {comment.user_name}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {new Date(comment.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-gray-700">{comment.content}</p>
                       </div>
-                      <p className="text-gray-700">{comment.content}</p>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>

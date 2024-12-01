@@ -247,7 +247,7 @@ export const getComments = (postId) => async (dispatch) => {
     dispatch({ type: GET_COMMENTS_REQUEST });
 
     const response = await axios.get(`/blogs/posts/${postId}/comments/`);
-
+    console.log(response);
     if (response?.data) {
       dispatch({
         type: GET_COMMENTS_SUCCESS,
@@ -275,7 +275,7 @@ export const deleteComment = (postId, commentId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_COMMENT_REQUEST });
 
-    await axios.delete(`/blogs/posts/${postId}/comment/${commentId}/`);
+    await axios.delete(`/blogs/posts/${postId}/comments/${commentId}/delete/`);
 
     dispatch({
       type: DELETE_COMMENT_SUCCESS,
@@ -302,7 +302,7 @@ export const updateComment =
       dispatch({ type: UPDATE_COMMENT_REQUEST });
 
       const response = await axios.put(
-        `/blogs/posts/${postId}/comment/${commentId}/`,
+        `/blogs/posts/${postId}/comments/${commentId}/update/`,
         commentData
       );
 
