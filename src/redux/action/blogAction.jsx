@@ -434,12 +434,12 @@ export const likePost = (postId, userData) => async (dispatch) => {
   }
 };
 
-export const unlikePost = (postId, userData) => async (dispatch) => {
+export const unlikePost = (postId, like_id, userData) => async (dispatch) => {
   try {
     dispatch({ type: UNLIKE_POST_REQUEST });
 
     const response = await axios.delete(
-      `/blogs/posts/${postId}/likes/delete/`,
+      `/blogs/posts/${postId}/likes/${like_id}/delete/`,
       {
         data: {
           user_id: userData.user_id,

@@ -27,6 +27,8 @@ const BlogDetail = () => {
   const dispatch = useDispatch();
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const [likesUpdated, setLikesUpdated] = useState(false);
+  const [commentsUpdated, setCommentsUpdated] = useState(false);
 
   // Get data from Redux store
   const {
@@ -47,14 +49,18 @@ const BlogDetail = () => {
   // Fetch blog detail and images
   useEffect(() => {
     const fetchBlogData = async () => {
-      await dispatch(getBlogDetail(blogId));
-      await dispatch(getBlogImages(blogId));
-      await dispatch(getComments(blogId));
-      await dispatch(getPostLikes(blogId));
+      await Promise.all([
+        dispatch(getBlogDetail(blogId)),
+        dispatch(getBlogImages(blogId)),
+        dispatch(getComments(blogId)),
+        dispatch(getPostLikes(blogId)),
+      ]);
     };
 
     fetchBlogData();
-  }, [dispatch, blogId]);
+    setLikesUpdated(false);
+    setCommentsUpdated(false);
+  }, [dispatch, blogId, likesUpdated, commentsUpdated]);
 
   // Filter images that match the current post ID
   const postImages =
@@ -79,11 +85,7 @@ const BlogDetail = () => {
       if (result.success) {
         message.success("Comment posted successfully");
         setNewComment("");
-        // Refresh both comments and blog detail
-        await Promise.all([
-          dispatch(getComments(blogId)),
-          dispatch(getBlogDetail(blogId)),
-        ]);
+        setCommentsUpdated(true);
       } else {
         message.error(result.error || "Failed to post comment");
       }
@@ -100,6 +102,15 @@ const BlogDetail = () => {
     return isLike;
   };
 
+  // Add this function to get the like_id
+  const getUserLikeId = () => {
+    if (!userInfo || !postLikes) return null;
+    const userLike = postLikes.find(
+      (like) => like.user_id === userInfo.user_id
+    );
+    return userLike ? userLike.id : null;
+  };
+
   const handleLikeToggle = async () => {
     if (!userInfo) {
       message.error("Please login to like this post");
@@ -107,7 +118,7 @@ const BlogDetail = () => {
     }
 
     const userData = {
-      user_id: userInfo.id,
+      user_id: userInfo.user_id,
       user_name: userInfo.first_name + " " + userInfo.last_name,
       user_email: userInfo.email,
     };
@@ -117,14 +128,16 @@ const BlogDetail = () => {
       const isCurrentlyLiked = hasUserLiked();
 
       if (isCurrentlyLiked) {
-        result = await dispatch(unlikePost(blogId, userData));
+        const like_id = getUserLikeId();
+        if (!like_id) {
+          message.error("Error finding like record");
+          return;
+        }
+
+        result = await dispatch(unlikePost(blogId, like_id, userData));
         if (result.success) {
           message.success("Post unliked successfully");
-          // Refresh both likes list and blog detail
-          await Promise.all([
-            dispatch(getPostLikes(blogId)),
-            dispatch(getBlogDetail(blogId)),
-          ]);
+          setLikesUpdated(true);
         } else {
           message.error(result.error || "Failed to unlike post");
         }
@@ -132,11 +145,7 @@ const BlogDetail = () => {
         result = await dispatch(likePost(blogId, userData));
         if (result.success) {
           message.success("Post liked successfully");
-          // Refresh both likes list and blog detail
-          await Promise.all([
-            dispatch(getPostLikes(blogId)),
-            dispatch(getBlogDetail(blogId)),
-          ]);
+          setLikesUpdated(true);
         } else {
           message.error(result.error || "Failed to like post");
         }
@@ -144,11 +153,7 @@ const BlogDetail = () => {
     } catch (error) {
       console.error("Like/Unlike error:", error);
       message.error("Something went wrong");
-      // Refresh both states to ensure UI is in sync
-      await Promise.all([
-        dispatch(getPostLikes(blogId)),
-        dispatch(getBlogDetail(blogId)),
-      ]);
+      setLikesUpdated(true);
     }
   };
 
