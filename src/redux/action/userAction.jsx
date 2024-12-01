@@ -21,7 +21,9 @@ export const fetchUsers = (page = 1, limit = 10) => {
     dispatch({ type: FETCH_USERS_REQUEST });
     try {
       const response = await axios.get(
-        `/users/read?page=${page}&limit=${limit}`
+        `${
+          import.meta.env.VITE_BACKEND_API
+        }/users/read?page=${page}&limit=${limit}`
       );
 
       if (response && response.EC === 1) {
@@ -52,7 +54,9 @@ export const searchUsers = (searchQuery) => {
     dispatch({ type: SEARCH_USERS_REQUEST });
     try {
       const response = await axios.get(
-        `/users/search?searchQuery=${searchQuery}`
+        `${
+          import.meta.env.VITE_BACKEND_API
+        }/users/search?searchQuery=${searchQuery}`
       );
 
       if (response && response.EC === 1) {
@@ -89,7 +93,10 @@ export const createUser = (userData) => {
         typeLogin: "local",
       };
 
-      const response = await axios.post("/users/create", payload);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/users/create`,
+        payload
+      );
 
       if (response && response.EC === 1) {
         dispatch({
@@ -114,9 +121,12 @@ export const deleteUsers = (userIds) => {
   return async (dispatch) => {
     dispatch({ type: DELETE_USERS_REQUEST });
     try {
-      const response = await axios.delete("/users/bulk-delete", {
-        data: { ids: userIds },
-      });
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_API}/users/bulk-delete`,
+        {
+          data: { ids: userIds },
+        }
+      );
 
       if (response && response.EC === 1) {
         dispatch({
@@ -150,9 +160,12 @@ export const updateUsers = (users) => {
         roleId: user.roleId || "",
       }));
 
-      const response = await axios.put("/users/bulk-update", {
-        users: formattedUsers,
-      });
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_API}/users/bulk-update`,
+        {
+          users: formattedUsers,
+        }
+      );
 
       if (response && response.EC === 1) {
         dispatch({
