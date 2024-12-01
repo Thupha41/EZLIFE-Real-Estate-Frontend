@@ -27,7 +27,9 @@ export const fetchPermissions = (page = 1, limit = 10) => {
     dispatch({ type: FETCH_PERMISSIONS_REQUEST });
     try {
       const response = await axios.get(
-        `/permissions/read?page=${page}&limit=${limit}`
+        `${
+          import.meta.env.VITE_BACKEND_API
+        }/permissions/read?page=${page}&limit=${limit}`
       );
 
       if (response && response.EC === 1) {
