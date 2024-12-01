@@ -420,7 +420,7 @@ export const likePost = (postId, userData) => async (dispatch) => {
     console.error("Error liking post:", error);
     dispatch({
       type: LIKE_POST_FAILURE,
-      payload: error.response?.message || "Failed to like post",
+      payload: error.response?.detail || "Failed to like post",
     });
 
     return {
