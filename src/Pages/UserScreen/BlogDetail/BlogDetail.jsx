@@ -159,10 +159,14 @@ const BlogDetail = () => {
   if (blogDetailLoading) return <div>Loading...</div>;
   if (blogDetailError) return <div>Error: {blogDetailError}</div>;
   if (!blogDetail) return <div>No blog found</div>;
-  const stripHtmlTags = (html) => {
+  const stripHtmlTagsAndSEP = (html) => {
+    // First remove HTML tags
     const tmp = document.createElement("div");
     tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || "";
+    const text = tmp.textContent || tmp.innerText || "";
+
+    // Then remove [SEP] and trim spaces
+    return text.replace(/\[SEP\]/g, "").trim();
   };
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -190,7 +194,7 @@ const BlogDetail = () => {
                 </span>
               </div>
               <div className="prose max-w-none">
-                {stripHtmlTags(blogDetail.content)}
+                {stripHtmlTagsAndSEP(blogDetail.content)}
               </div>
 
               {/* Social Share */}
@@ -364,7 +368,9 @@ const BlogDetail = () => {
                 title={blog.title}
                 authorName={blog.user_name}
                 date={new Date(blog.created_at).toLocaleDateString()}
-                description={blog.content.substring(0, 150) + "..."}
+                description={
+                  stripHtmlTagsAndSEP(blog.content).substring(0, 150) + "..."
+                }
                 thumbnail={blog.thumbnail_url}
               />
             ))}
