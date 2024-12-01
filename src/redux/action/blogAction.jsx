@@ -251,13 +251,13 @@ export const getComments = (postId) => async (dispatch) => {
     dispatch({ type: GET_COMMENTS_REQUEST });
 
     const response = await axios.get(`/blogs/posts/${postId}/comments/`);
-    console.log(response);
+
     if (response?.data) {
       dispatch({
         type: GET_COMMENTS_SUCCESS,
-        payload: response.data,
+        payload: response,
       });
-      return { success: true, data: response.data };
+      return { success: true, data: response };
     } else {
       throw new Error("Invalid response format");
     }
@@ -265,12 +265,12 @@ export const getComments = (postId) => async (dispatch) => {
     console.error("Error fetching comments:", error);
     dispatch({
       type: GET_COMMENTS_FAILURE,
-      payload: error.response?.data?.message || "Failed to fetch comments",
+      payload: error.response.message || "Failed to fetch comments",
     });
 
     return {
       success: false,
-      error: error.response?.data?.message || "Failed to fetch comments",
+      error: error.response.message || "Failed to fetch comments",
     };
   }
 };
