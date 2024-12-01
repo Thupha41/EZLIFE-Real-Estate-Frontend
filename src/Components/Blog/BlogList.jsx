@@ -85,9 +85,9 @@ const BlogList = () => {
 
   const getCategoryLabel = (category) => {
     const categories = {
-      "property-investment": "Real Estate",
-      "real-estate": "Feng Shui",
-      "market-analysis": "Knowledge",
+      "real-estate": "Real Estate",
+      "feng-shui": "Feng Shui",
+      knowledge: "Knowledge",
       "contract-templates": "Contract Templates",
       miscellaneous: "Miscellaneous",
     };
@@ -211,11 +211,9 @@ const BlogList = () => {
             rules={[{ required: true, message: "Please select a category!" }]}
           >
             <Select>
-              <Select.Option value="property-investment">
-                Real Estate
-              </Select.Option>
-              <Select.Option value="real-estate">Feng Shui</Select.Option>
-              <Select.Option value="market-analysis">Knowledge</Select.Option>
+              <Select.Option value="real-estate">Real Estate</Select.Option>
+              <Select.Option value="feng-shui">Feng Shui</Select.Option>
+              <Select.Option value="knowledge">Knowledge</Select.Option>
               <Select.Option value="contract-templates">
                 Contract Templates
               </Select.Option>
