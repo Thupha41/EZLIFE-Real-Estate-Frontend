@@ -62,9 +62,7 @@ const BlogDetail = () => {
     if (!newComment.trim()) return;
 
     const commentData = {
-      user_id: userInfo.id,
-      user_name: userInfo.first_name + " " + userInfo.last_name,
-      user_email: userInfo.email,
+      parent: null,
       content: newComment.trim(),
     };
 
