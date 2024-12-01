@@ -32,6 +32,9 @@ import {
   UPDATE_BLOG_REQUEST,
   UPDATE_BLOG_SUCCESS,
   UPDATE_BLOG_FAILURE,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
 } from "../action/blogAction";
 
 const initialState = {
@@ -61,6 +64,8 @@ const initialState = {
   deleteBlogError: null,
   updateBlogLoading: false,
   updateBlogError: null,
+  likePostLoading: false,
+  likePostError: null,
 };
 
 const blogReducer = (state = initialState, action) => {
@@ -345,6 +350,44 @@ const blogReducer = (state = initialState, action) => {
         ...state,
         updateBlogLoading: false,
         updateBlogError: action.payload,
+      };
+
+    case LIKE_POST_REQUEST:
+      return {
+        ...state,
+        likePostLoading: true,
+        likePostError: null,
+      };
+
+    case LIKE_POST_SUCCESS:
+      return {
+        ...state,
+        likePostLoading: false,
+        blogs: state.blogs.map((blog) =>
+          blog.id === action.payload.postId
+            ? {
+                ...blog,
+                likes_count: (blog.likes_count || 0) + 1,
+                is_liked: true,
+              }
+            : blog
+        ),
+        blogDetail:
+          state.blogDetail?.id === action.payload.postId
+            ? {
+                ...state.blogDetail,
+                likes_count: (state.blogDetail.likes_count || 0) + 1,
+                is_liked: true,
+              }
+            : state.blogDetail,
+        likePostError: null,
+      };
+
+    case LIKE_POST_FAILURE:
+      return {
+        ...state,
+        likePostLoading: false,
+        likePostError: action.payload,
       };
 
     default:

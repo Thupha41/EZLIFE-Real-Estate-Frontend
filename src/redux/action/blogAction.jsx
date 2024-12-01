@@ -45,6 +45,10 @@ export const UPDATE_BLOG_REQUEST = "UPDATE_BLOG_REQUEST";
 export const UPDATE_BLOG_SUCCESS = "UPDATE_BLOG_SUCCESS";
 export const UPDATE_BLOG_FAILURE = "UPDATE_BLOG_FAILURE";
 
+export const LIKE_POST_REQUEST = "LIKE_POST_REQUEST";
+export const LIKE_POST_SUCCESS = "LIKE_POST_SUCCESS";
+export const LIKE_POST_FAILURE = "LIKE_POST_FAILURE";
+
 // Action Creators
 export const createBlogPost = (blogData) => async (dispatch) => {
   try {
@@ -378,6 +382,42 @@ export const updateBlog = (postId, blogData) => async (dispatch) => {
     return {
       success: false,
       error: error.response?.data?.message || "Failed to update blog post",
+    };
+  }
+};
+
+export const likePost = (postId, userData) => async (dispatch) => {
+  try {
+    dispatch({ type: LIKE_POST_REQUEST });
+
+    const response = await axios.post(`/blogs/posts/${postId}/likes/create/`, {
+      user_id: userData.user_id,
+      user_name: userData.user_name,
+      user_email: userData.user_email,
+    });
+    console.log(response);
+    if (response) {
+      dispatch({
+        type: LIKE_POST_SUCCESS,
+        payload: {
+          postId,
+          likeData: response,
+        },
+      });
+      return { success: true, data: response };
+    } else {
+      throw new Error("Invalid response format");
+    }
+  } catch (error) {
+    console.error("Error liking post:", error);
+    dispatch({
+      type: LIKE_POST_FAILURE,
+      payload: error.response?.data?.message || "Failed to like post",
+    });
+
+    return {
+      success: false,
+      error: error.response?.data?.message || "Failed to like post",
     };
   }
 };

@@ -1,10 +1,21 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaHeart,
+  FaRegHeart,
+} from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
 import BlogItem from "../../../Components/Blog/BlogItem";
-import { getBlogDetail, getBlogImages } from "../../../redux/action/blogAction";
+import {
+  getBlogDetail,
+  getBlogImages,
+  likePost,
+} from "../../../redux/action/blogAction";
+import { message } from "antd";
 
 const BlogDetail = () => {
   const { blogId } = useParams();
@@ -18,7 +29,9 @@ const BlogDetail = () => {
     blogDetailError,
     blogImages,
     blogImagesLoading,
+    likePostLoading,
   } = useSelector((state) => state.blog);
+  const { userInfo } = useSelector((state) => state.account);
 
   // Fetch blog detail and images
   useEffect(() => {
@@ -39,6 +52,27 @@ const BlogDetail = () => {
     if (!newComment.trim()) return;
     // Comment submission logic will be added later
     setNewComment("");
+  };
+
+  const handleLikePost = async () => {
+    if (!userInfo) {
+      message.error("Please login to like this post");
+      return;
+    }
+
+    const userData = {
+      user_id: userInfo.user_id,
+      user_name: userInfo.user_name,
+      user_email: userInfo.user_email,
+    };
+
+    const result = await dispatch(likePost(blogId, userData));
+
+    if (result.success) {
+      message.success("Post liked successfully");
+    } else {
+      message.error(result.error || "Failed to like post");
+    }
   };
 
   if (blogDetailLoading) return <div>Loading...</div>;
@@ -65,7 +99,21 @@ const BlogDetail = () => {
             )}
 
             <div className="p-6">
-              <h1 className="text-3xl font-bold mb-4">{blogDetail.title}</h1>
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-3xl font-bold">{blogDetail.title}</h1>
+                <button
+                  onClick={handleLikePost}
+                  disabled={likePostLoading}
+                  className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors"
+                >
+                  {blogDetail.is_liked ? (
+                    <FaHeart className="text-red-500" size={24} />
+                  ) : (
+                    <FaRegHeart size={24} />
+                  )}
+                  <span>{blogDetail.likes_count || 0}</span>
+                </button>
+              </div>
               <div className="flex items-center gap-4 text-sm text-gray-600 mb-6">
                 <span>By {blogDetail.user_name}</span>
                 <span>
