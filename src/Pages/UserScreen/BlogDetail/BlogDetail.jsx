@@ -73,15 +73,23 @@ const BlogDetail = () => {
       content: newComment.trim(),
     };
 
-    const result = await dispatch(createComment(blogId, commentData));
+    try {
+      const result = await dispatch(createComment(blogId, commentData));
 
-    if (result.success) {
-      message.success("Comment posted successfully");
-      setNewComment("");
-      // Refresh comments after posting
-      dispatch(getComments(blogId));
-    } else {
-      message.error(result.error || "Failed to post comment");
+      if (result.success) {
+        message.success("Comment posted successfully");
+        setNewComment("");
+        // Refresh both comments and blog detail
+        await Promise.all([
+          dispatch(getComments(blogId)),
+          dispatch(getBlogDetail(blogId)),
+        ]);
+      } else {
+        message.error(result.error || "Failed to post comment");
+      }
+    } catch (error) {
+      console.error("Comment error:", error);
+      message.error("Something went wrong");
     }
   };
 
@@ -109,22 +117,26 @@ const BlogDetail = () => {
       const isCurrentlyLiked = hasUserLiked();
 
       if (isCurrentlyLiked) {
-        // If user has liked, handle unlike
         result = await dispatch(unlikePost(blogId, userData));
         if (result.success) {
           message.success("Post unliked successfully");
-          // Refresh likes list to update UI
-          await dispatch(getPostLikes(blogId));
+          // Refresh both likes list and blog detail
+          await Promise.all([
+            dispatch(getPostLikes(blogId)),
+            dispatch(getBlogDetail(blogId)),
+          ]);
         } else {
           message.error(result.error || "Failed to unlike post");
         }
       } else {
-        // If user hasn't liked, handle like
         result = await dispatch(likePost(blogId, userData));
         if (result.success) {
           message.success("Post liked successfully");
-          // Refresh likes list to update UI
-          await dispatch(getPostLikes(blogId));
+          // Refresh both likes list and blog detail
+          await Promise.all([
+            dispatch(getPostLikes(blogId)),
+            dispatch(getBlogDetail(blogId)),
+          ]);
         } else {
           message.error(result.error || "Failed to like post");
         }
@@ -132,8 +144,11 @@ const BlogDetail = () => {
     } catch (error) {
       console.error("Like/Unlike error:", error);
       message.error("Something went wrong");
-      // Refresh likes list to ensure UI is in sync
-      await dispatch(getPostLikes(blogId));
+      // Refresh both states to ensure UI is in sync
+      await Promise.all([
+        dispatch(getPostLikes(blogId)),
+        dispatch(getBlogDetail(blogId)),
+      ]);
     }
   };
 
