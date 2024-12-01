@@ -56,8 +56,8 @@ const BlogList = () => {
       const updateData = {
         ...values,
         user_id: userInfo.user_id,
-        user_email: userInfo.user_email,
-        user_name: userInfo.user_name,
+        user_email: userInfo.email,
+        user_name: userInfo.first_name + " " + userInfo.last_name,
       };
 
       const result = await dispatch(updateBlog(editingBlog.id, updateData));
