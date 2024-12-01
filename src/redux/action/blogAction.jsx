@@ -329,7 +329,7 @@ export const deleteBlog = (postId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_BLOG_REQUEST });
 
-    await axios.delete(`/blogs/posts/${postId}/`);
+    await axios.delete(`/blogs/posts/${postId}/delete/`);
 
     dispatch({
       type: DELETE_BLOG_SUCCESS,
@@ -354,7 +354,10 @@ export const updateBlog = (postId, blogData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_BLOG_REQUEST });
 
-    const response = await axios.put(`/blogs/posts/${postId}/`, blogData);
+    const response = await axios.put(
+      `/blogs/posts/${postId}/update/`,
+      blogData
+    );
     console.log("Response:", response);
     if (response) {
       dispatch({
