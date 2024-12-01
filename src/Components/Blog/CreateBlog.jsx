@@ -81,6 +81,11 @@ const CreateBlog = () => {
                 message: "Error",
                 description: `Failed to upload image: ${file.name}`,
               });
+            } else {
+              notification.success({
+                message: "Success",
+                description: "Uploaded image successfully",
+              });
             }
           }
         }

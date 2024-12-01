@@ -140,12 +140,16 @@ export const uploadBlogImage = (postId, imageData) => async (dispatch) => {
       }
     );
 
-    dispatch({
-      type: UPLOAD_BLOG_IMAGE_SUCCESS,
-      payload: response.data,
-    });
+    if (response && response.EM === "Image saved successfully") {
+      dispatch({
+        type: UPLOAD_BLOG_IMAGE_SUCCESS,
+        payload: response,
+      });
+    } else {
+      throw new Error("Invalid response format");
+    }
 
-    return { success: true, data: response.data };
+    return { success: true, data: response.DT };
   } catch (error) {
     dispatch({
       type: UPLOAD_BLOG_IMAGE_FAILURE,
