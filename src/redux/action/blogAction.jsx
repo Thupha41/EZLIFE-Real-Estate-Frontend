@@ -181,7 +181,7 @@ export const getBlogDetail = (postId) => async (dispatch) => {
   try {
     dispatch({ type: GET_BLOG_DETAIL_REQUEST });
 
-    const response = await axios.get(`/blogs/posts/${postId}/details/`);
+    const response = await axios.get(`/blogs/posts/${postId}/`);
 
     if (response) {
       dispatch({
