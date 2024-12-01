@@ -87,7 +87,7 @@ const BlogDetail = () => {
 
   const hasUserLiked = () => {
     if (!userInfo || !postLikes) return false;
-    const isLike = postLikes.some((like) => like.user_id === userInfo.id);
+    const isLike = postLikes.some((like) => like.user_id === userInfo.user_id);
     console.log(isLike);
     return isLike;
   };
