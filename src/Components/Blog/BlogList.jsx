@@ -4,8 +4,10 @@ import {
   getBlogs,
   getBlogImages,
   updateBlog,
+  deleteBlog,
 } from "../../redux/action/blogAction";
 import { Modal, Form, Input, Select, message } from "antd";
+const { confirm } = Modal;
 
 const { TextArea } = Input;
 
@@ -40,11 +42,20 @@ const BlogList = () => {
     return blogImages?.find((img) => img.post === blogId);
   };
 
+  const stripHtmlTagsAndSEP = (html) => {
+    // First remove HTML tags
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    const text = tmp.textContent || tmp.innerText || "";
+
+    // Then remove [SEP] and trim spaces
+    return text.replace(/\[SEP\]/g, "").trim();
+  };
   const handleEdit = (blog) => {
     setEditingBlog(blog);
     form.setFieldsValue({
       title: blog.title,
-      content: blog.content,
+      content: stripHtmlTagsAndSEP(blog.content),
       category: blog.category,
     });
     setIsEditModalVisible(true);
@@ -79,6 +90,34 @@ const BlogList = () => {
     setIsEditModalVisible(false);
     setEditingBlog(null);
     form.resetFields();
+  };
+
+  const handleDelete = (blog) => {
+    confirm({
+      title: "Delete Blog Post",
+      content: `Are you sure you want to delete "${blog.title}"? This action cannot be undone.`,
+      okText: "Yes, Delete",
+      okType: "danger",
+      cancelText: "No, Cancel",
+      async onOk() {
+        try {
+          const result = await dispatch(deleteBlog(blog.id));
+          if (result.success) {
+            message.success("Blog post deleted successfully");
+            // Refresh the blogs list
+            dispatch(getBlogs());
+          } else {
+            message.error(result.error || "Failed to delete blog post");
+          }
+        } catch (error) {
+          console.error("Delete error:", error);
+          message.error("Something went wrong while deleting the blog post");
+        }
+      },
+      onCancel() {
+        // User cancelled, do nothing
+      },
+    });
   };
 
   if (loading) return <div>Loading...</div>;
@@ -154,7 +193,10 @@ const BlogList = () => {
                     >
                       Edit
                     </button>
-                    <button className="text-red-600 hover:text-red-800 text-sm font-medium">
+                    <button
+                      onClick={() => handleDelete(blog)}
+                      className="text-red-600 hover:text-red-800 text-sm font-medium"
+                    >
                       Delete
                     </button>
                   </td>

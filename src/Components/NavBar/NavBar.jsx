@@ -36,7 +36,7 @@ const NavBar = () => {
         <Link to="/">
           <div className="flex items-center space-x-2 md:ml-7">
             <img src={logo} alt="Logo" className="w-10 h-10 md:w-14 md:h-14" />
-            <h1 className="text-2xl md:text-3xl font-bold">Ezlife Realty</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">EZGROUP</h1>
           </div>
         </Link>
 

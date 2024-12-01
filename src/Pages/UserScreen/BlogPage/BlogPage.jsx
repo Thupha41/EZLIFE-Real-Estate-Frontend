@@ -43,10 +43,14 @@ const BlogPage = () => {
     setListViewActive(true);
   };
 
-  const stripHtmlTags = (html) => {
+  const stripHtmlTagsAndSEP = (html) => {
+    // First remove HTML tags
     const tmp = document.createElement("div");
     tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || "";
+    const text = tmp.textContent || tmp.innerText || "";
+
+    // Then remove [SEP] and trim spaces
+    return text.replace(/\[SEP\]/g, "").trim();
   };
 
   useEffect(() => {
@@ -105,10 +109,10 @@ const BlogPage = () => {
                     </span>
                   </div>
                   <h2 className="text-2xl font-semibold mb-4">
-                    {stripHtmlTags(featuredBlog.title)}
+                    {stripHtmlTagsAndSEP(featuredBlog.title)}
                   </h2>
                   <p className="text-gray-600 mb-6 line-clamp-4">
-                    {stripHtmlTags(featuredBlog.content)}
+                    {stripHtmlTagsAndSEP(featuredBlog.content)}
                   </p>
                   <Link
                     to={`/blogs/${featuredBlog.id}`}
@@ -182,7 +186,7 @@ const BlogPage = () => {
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
-                    {stripHtmlTags(blog.title)}
+                    {stripHtmlTagsAndSEP(blog.title)}
                   </h3>
                   <div className="flex justify-between items-center text-sm text-gray-600 mb-3">
                     <span>By {blog.user_name}</span>
@@ -191,7 +195,7 @@ const BlogPage = () => {
                     </span>
                   </div>
                   <p className="text-gray-600 mb-4 line-clamp-3">
-                    {stripHtmlTags(blog.content)}
+                    {stripHtmlTagsAndSEP(blog.content)}
                   </p>
                   <Link
                     to={`/blogs/${blog.id}`}
