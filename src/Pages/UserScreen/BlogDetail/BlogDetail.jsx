@@ -25,6 +25,7 @@ const BlogDetail = () => {
   const { blogId } = useParams();
   const dispatch = useDispatch();
   const [newComment, setNewComment] = useState("");
+  const [showComments, setShowComments] = useState(false);
 
   // Get data from Redux store
   const {
@@ -35,6 +36,9 @@ const BlogDetail = () => {
     blogImagesLoading,
     likePostLoading,
     createCommentLoading,
+    comments,
+    commentsLoading,
+    commentsError,
   } = useSelector((state) => state.blog);
   const { userInfo } = useSelector((state) => state.account);
 
@@ -113,6 +117,10 @@ const BlogDetail = () => {
       console.log(error);
       message.error("Something went wrong");
     }
+  };
+
+  const toggleComments = () => {
+    setShowComments(!showComments);
   };
 
   if (blogDetailLoading) return <div>Loading...</div>;
@@ -217,12 +225,24 @@ const BlogDetail = () => {
               )}
             </button>
 
-            {/* Comments Section Title */}
-            <h2 className="text-xl font-bold mb-6">
-              Comments ({blogDetail.comments_count || 0})
-            </h2>
+            {/* Comments Section Title with Dropdown */}
+            <div
+              onClick={toggleComments}
+              className="flex items-center gap-2 cursor-pointer mb-6 select-none"
+            >
+              <h2 className="text-xl font-bold">
+                Comments ({blogDetail.comments_count || 0})
+              </h2>
+              <span
+                className={`transition-transform duration-200 ${
+                  showComments ? "rotate-180" : ""
+                }`}
+              >
+                ▼
+              </span>
+            </div>
 
-            {/* Comment Form */}
+            {/* Comment Form - Always visible */}
             <form onSubmit={handleSubmitComment} className="mb-8">
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
@@ -256,35 +276,47 @@ const BlogDetail = () => {
               </div>
             </form>
 
-            {/* Comments List */}
-            <div className="space-y-6">
-              {blogDetail.comments?.length === 0 ? (
-                <p className="text-gray-500 text-center">
-                  No comments yet. Be the first to comment!
-                </p>
-              ) : (
-                blogDetail.comments?.map((comment) => (
-                  <div key={comment.id} className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <FaRegUser className="text-gray-500" />
-                    </div>
-                    <div className="flex-grow">
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="font-semibold">
-                            {comment.user_name}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {new Date(comment.created_at).toLocaleDateString()}
-                          </span>
+            {/* Comments List - Toggleable */}
+            {showComments && (
+              <div className="space-y-6">
+                {commentsLoading ? (
+                  <p className="text-center text-gray-500">
+                    Loading comments...
+                  </p>
+                ) : commentsError ? (
+                  <p className="text-center text-red-500">
+                    Error loading comments: {commentsError}
+                  </p>
+                ) : comments?.length === 0 ? (
+                  <p className="text-gray-500 text-center">
+                    No comments yet. Be the first to comment!
+                  </p>
+                ) : (
+                  comments?.map((comment) => (
+                    <div key={comment.id} className="flex gap-4">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                        <FaRegUser className="text-gray-500" />
+                      </div>
+                      <div className="flex-grow">
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-semibold">
+                              {comment.user_name}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {new Date(
+                                comment.created_at
+                              ).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <p className="text-gray-700">{comment.content}</p>
                         </div>
-                        <p className="text-gray-700">{comment.content}</p>
                       </div>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
+                  ))
+                )}
+              </div>
+            )}
           </div>
         </div>
 
