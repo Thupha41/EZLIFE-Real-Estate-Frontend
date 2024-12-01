@@ -60,7 +60,10 @@ export const createPermission = (permissionData) => {
   return async (dispatch) => {
     dispatch({ type: ADD_PERMISSION_REQUEST });
     try {
-      const response = await axios.post("/permissions/create", permissionData);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/permissions/create`,
+        permissionData
+      );
 
       if (response && response.EC === 1) {
         dispatch({
@@ -89,7 +92,7 @@ export const updatePermission = (id, permissionData) => {
     dispatch({ type: UPDATE_PERMISSIONS_REQUEST });
     try {
       const response = await axios.put(
-        `/permissions/update/${id}`,
+        `${import.meta.env.VITE_BACKEND_API}/permissions/update/${id}`,
         permissionData
       );
 
@@ -119,7 +122,9 @@ export const deletePermission = (id) => {
   return async (dispatch) => {
     dispatch({ type: DELETE_PERMISSIONS_REQUEST });
     try {
-      const response = await axios.delete(`/permissions/delete/${id}`);
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_API}/permissions/delete/${id}`
+      );
 
       if (response && response.EC === 1) {
         dispatch({
@@ -147,7 +152,10 @@ export const assignPermissionToRole = (data) => {
   return async (dispatch) => {
     dispatch({ type: ASSIGN_PERMISSION_REQUEST });
     try {
-      const response = await axios.post("/permissions/assign-to-role", data);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/permissions/assign-to-role`,
+        data
+      );
 
       if (response && response.EC === 1) {
         dispatch({
@@ -175,7 +183,9 @@ export const getPermissionsByRole = (roleId) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_ROLE_PERMISSIONS_REQUEST });
     try {
-      const response = await axios.get(`/roles/${roleId}/permissions`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_API}/roles/${roleId}/permissions`
+      );
 
       if (response && response.EC === 1) {
         dispatch({

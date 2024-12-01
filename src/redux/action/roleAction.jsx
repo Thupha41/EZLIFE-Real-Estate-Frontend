@@ -22,7 +22,10 @@ export const doAddRole = (roleData) => {
         description: roleData.description,
       };
 
-      const response = await axios.post("/roles/create", payload);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/roles/create`,
+        payload
+      );
 
       if (response && response.EC === 1) {
         dispatch({
@@ -51,7 +54,9 @@ export const fetchRoles = () => {
   return async (dispatch) => {
     dispatch({ type: FETCH_ROLES_REQUEST });
     try {
-      const response = await axios.get(`/roles/read`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_API}/roles/read`
+      );
 
       if (response && response.EC === 1) {
         dispatch({
@@ -75,7 +80,9 @@ export const deleteRole = (roleId) => {
   return async (dispatch) => {
     dispatch({ type: DELETE_ROLES_REQUEST });
     try {
-      const response = await axios.delete(`/roles/delete?id=${roleId}`);
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_API}/roles/delete?id=${roleId}`
+      );
 
       if (response && response.EC === 1) {
         dispatch({
@@ -105,7 +112,10 @@ export const updateRole = (roleId, roleData) => {
         description: roleData.description,
       };
 
-      const response = await axios.put(`/roles/update/${roleId}`, payload);
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_API}/roles/update/${roleId}`,
+        payload
+      );
 
       if (response && response.EC === 1) {
         dispatch({
