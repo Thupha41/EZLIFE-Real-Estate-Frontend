@@ -49,6 +49,10 @@ export const LIKE_POST_REQUEST = "LIKE_POST_REQUEST";
 export const LIKE_POST_SUCCESS = "LIKE_POST_SUCCESS";
 export const LIKE_POST_FAILURE = "LIKE_POST_FAILURE";
 
+export const UNLIKE_POST_REQUEST = "UNLIKE_POST_REQUEST";
+export const UNLIKE_POST_SUCCESS = "UNLIKE_POST_SUCCESS";
+export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
+
 // Action Creators
 export const createBlogPost = (blogData) => async (dispatch) => {
   try {
@@ -418,6 +422,47 @@ export const likePost = (postId, userData) => async (dispatch) => {
     return {
       success: false,
       error: error.response?.data?.message || "Failed to like post",
+    };
+  }
+};
+
+export const unlikePost = (postId, userData) => async (dispatch) => {
+  try {
+    dispatch({ type: UNLIKE_POST_REQUEST });
+
+    const response = await axios.delete(
+      `/blogs/posts/${postId}/likes/delete/`,
+      {
+        data: {
+          user_id: userData.user_id,
+          user_name: userData.user_name,
+          user_email: userData.user_email,
+        },
+      }
+    );
+
+    if (response) {
+      dispatch({
+        type: UNLIKE_POST_SUCCESS,
+        payload: {
+          postId,
+          likeData: response,
+        },
+      });
+      return { success: true, data: response };
+    } else {
+      throw new Error("Invalid response format");
+    }
+  } catch (error) {
+    console.error("Error unliking post:", error);
+    dispatch({
+      type: UNLIKE_POST_FAILURE,
+      payload: error.response?.data?.message || "Failed to unlike post",
+    });
+
+    return {
+      success: false,
+      error: error.response?.data?.message || "Failed to unlike post",
     };
   }
 };

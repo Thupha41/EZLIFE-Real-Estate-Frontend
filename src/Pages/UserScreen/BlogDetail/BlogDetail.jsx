@@ -15,6 +15,7 @@ import {
   getBlogDetail,
   getBlogImages,
   likePost,
+  unlikePost,
   createComment,
   getComments,
 } from "../../../redux/action/blogAction";
@@ -79,7 +80,7 @@ const BlogDetail = () => {
     }
   };
 
-  const handleLikePost = async () => {
+  const handleLikeToggle = async () => {
     if (!userInfo) {
       message.error("Please login to like this post");
       return;
@@ -91,12 +92,28 @@ const BlogDetail = () => {
       user_email: userInfo.email,
     };
 
-    const result = await dispatch(likePost(blogId, userData));
-
-    if (result.success) {
-      message.success("Post liked successfully");
-    } else {
-      message.error(result.error || "Failed to like post");
+    try {
+      let result;
+      if (blogDetail.is_liked) {
+        // Unlike the post
+        result = await dispatch(unlikePost(blogId, userData));
+        if (result.success) {
+          message.success("Post unliked successfully");
+        } else {
+          message.error(result.error || "Failed to unlike post");
+        }
+      } else {
+        // Like the post
+        result = await dispatch(likePost(blogId, userData));
+        if (result.success) {
+          message.success("Post liked successfully");
+        } else {
+          message.error(result.error || "Failed to like post");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong");
     }
   };
 
@@ -181,16 +198,25 @@ const BlogDetail = () => {
 
             {/* Like Button */}
             <button
-              onClick={handleLikePost}
+              onClick={handleLikeToggle}
               disabled={likePostLoading}
-              className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors mb-6"
+              className={`flex items-center gap-2 transition-colors mb-6 ${
+                blogDetail.is_liked
+                  ? "text-red-500 hover:text-gray-600"
+                  : "text-gray-600 hover:text-red-500"
+              }`}
             >
               {blogDetail.is_liked ? (
-                <FaHeart className="text-red-500" size={24} />
+                <>
+                  <FaHeart size={24} />
+                  <span>Unlike this post</span>
+                </>
               ) : (
-                <FaRegHeart size={24} />
+                <>
+                  <FaRegHeart size={24} />
+                  <span>Like this post</span>
+                </>
               )}
-              <span>Like this post</span>
             </button>
 
             {/* Comments Section Title */}
