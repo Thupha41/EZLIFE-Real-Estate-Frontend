@@ -39,7 +39,10 @@ const BlogList = () => {
 
   // Find matching blog image
   const getBlogImage = (blogId) => {
-    return blogImages?.find((img) => img.post === blogId);
+    if (!blogImages || !Array.isArray(blogImages)) {
+      return null;
+    }
+    return blogImages.find((img) => img.post === blogId);
   };
 
   const stripHtmlTagsAndSEP = (html) => {
@@ -166,7 +169,7 @@ const BlogList = () => {
                     {blogImage ? (
                       <img
                         src={blogImage.image_url}
-                        alt={blogImage.label}
+                        alt={blog.title}
                         className="w-16 h-16 object-cover rounded"
                       />
                     ) : (
