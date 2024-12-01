@@ -53,6 +53,10 @@ export const UNLIKE_POST_REQUEST = "UNLIKE_POST_REQUEST";
 export const UNLIKE_POST_SUCCESS = "UNLIKE_POST_SUCCESS";
 export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
 
+export const GET_POST_LIKES_REQUEST = "GET_POST_LIKES_REQUEST";
+export const GET_POST_LIKES_SUCCESS = "GET_POST_LIKES_SUCCESS";
+export const GET_POST_LIKES_FAILURE = "GET_POST_LIKES_FAILURE";
+
 // Action Creators
 export const createBlogPost = (blogData) => async (dispatch) => {
   try {
@@ -223,12 +227,12 @@ export const createComment = (postId, commentData) => async (dispatch) => {
       commentData
     );
 
-    if (response?.data) {
+    if (response) {
       dispatch({
         type: CREATE_COMMENT_SUCCESS,
-        payload: response.data,
+        payload: response,
       });
-      return { success: true, data: response.data };
+      return { success: true, data: response };
     } else {
       throw new Error("Invalid response format");
     }
@@ -236,12 +240,12 @@ export const createComment = (postId, commentData) => async (dispatch) => {
     console.error("Error creating comment:", error);
     dispatch({
       type: CREATE_COMMENT_FAILURE,
-      payload: error.response?.data?.message || "Failed to create comment",
+      payload: error.response?.message || "Failed to create comment",
     });
 
     return {
       success: false,
-      error: error.response?.data?.message || "Failed to create comment",
+      error: error.response?.message || "Failed to create comment",
     };
   }
 };
@@ -464,5 +468,33 @@ export const unlikePost = (postId, userData) => async (dispatch) => {
       success: false,
       error: error.response?.data?.message || "Failed to unlike post",
     };
+  }
+};
+
+export const getPostLikes = (postId) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_POST_LIKES_REQUEST });
+
+    const response = await axios.get(`/blogs/posts/${postId}/likes/`);
+
+    if (response) {
+      dispatch({
+        type: GET_POST_LIKES_SUCCESS,
+        payload: response,
+      });
+      return { success: true, data: response };
+    } else {
+      dispatch({
+        type: GET_POST_LIKES_FAILURE,
+        payload: response?.message || "Failed to fetch likes",
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching post likes:", error);
+    dispatch({
+      type: GET_POST_LIKES_FAILURE,
+      payload: error.response?.message || "Failed to fetch likes",
+    });
+    return { success: false, error: "Failed to fetch likes" };
   }
 };

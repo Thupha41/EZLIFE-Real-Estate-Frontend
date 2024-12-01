@@ -38,6 +38,9 @@ import {
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
   UNLIKE_POST_FAILURE,
+  GET_POST_LIKES_REQUEST,
+  GET_POST_LIKES_SUCCESS,
+  GET_POST_LIKES_FAILURE,
 } from "../action/blogAction";
 
 const initialState = {
@@ -69,6 +72,9 @@ const initialState = {
   updateBlogError: null,
   likePostLoading: false,
   likePostError: null,
+  postLikes: [],
+  postLikesLoading: false,
+  postLikesError: null,
 };
 
 const blogReducer = (state = initialState, action) => {
@@ -432,6 +438,28 @@ const blogReducer = (state = initialState, action) => {
         ...state,
         likePostLoading: false,
         likePostError: action.payload,
+      };
+
+    case GET_POST_LIKES_REQUEST:
+      return {
+        ...state,
+        postLikesLoading: true,
+        postLikesError: null,
+      };
+
+    case GET_POST_LIKES_SUCCESS:
+      return {
+        ...state,
+        postLikesLoading: false,
+        postLikes: action.payload,
+        postLikesError: null,
+      };
+
+    case GET_POST_LIKES_FAILURE:
+      return {
+        ...state,
+        postLikesLoading: false,
+        postLikesError: action.payload,
       };
 
     default:

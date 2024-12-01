@@ -18,6 +18,7 @@ import {
   unlikePost,
   createComment,
   getComments,
+  getPostLikes,
 } from "../../../redux/action/blogAction";
 import { message } from "antd";
 
@@ -39,6 +40,7 @@ const BlogDetail = () => {
     comments,
     commentsLoading,
     commentsError,
+    postLikes,
   } = useSelector((state) => state.blog);
   const { userInfo } = useSelector((state) => state.account);
 
@@ -48,6 +50,7 @@ const BlogDetail = () => {
       await dispatch(getBlogDetail(blogId));
       await dispatch(getBlogImages(blogId));
       await dispatch(getComments(blogId));
+      await dispatch(getPostLikes(blogId));
     };
 
     fetchBlogData();
@@ -82,6 +85,11 @@ const BlogDetail = () => {
     }
   };
 
+  const hasUserLiked = () => {
+    if (!userInfo || !postLikes) return false;
+    return postLikes.some((like) => like.user_id === userInfo.id);
+  };
+
   const handleLikeToggle = async () => {
     if (!userInfo) {
       message.error("Please login to like this post");
@@ -96,25 +104,27 @@ const BlogDetail = () => {
 
     try {
       let result;
-      if (blogDetail.is_liked) {
-        // Unlike the post
+      if (hasUserLiked()) {
         result = await dispatch(unlikePost(blogId, userData));
         if (result.success) {
           message.success("Post unliked successfully");
+          // Refresh likes after unlike
+          dispatch(getPostLikes(blogId));
         } else {
           message.error(result.error || "Failed to unlike post");
         }
       } else {
-        // Like the post
         result = await dispatch(likePost(blogId, userData));
         if (result.success) {
           message.success("Post liked successfully");
+          // Refresh likes after like
+          dispatch(getPostLikes(blogId));
         } else {
           message.error(result.error || "Failed to like post");
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error("Like/Unlike error:", error);
       message.error("Something went wrong");
     }
   };
@@ -207,12 +217,12 @@ const BlogDetail = () => {
               onClick={handleLikeToggle}
               disabled={likePostLoading}
               className={`flex items-center gap-2 transition-colors mb-6 ${
-                blogDetail.is_liked
+                hasUserLiked()
                   ? "text-red-500 hover:text-gray-600"
                   : "text-gray-600 hover:text-red-500"
               }`}
             >
-              {blogDetail.is_liked ? (
+              {hasUserLiked() ? (
                 <>
                   <FaHeart size={24} />
                   <span>Unlike this post</span>
