@@ -27,8 +27,6 @@ const BlogDetail = () => {
   const dispatch = useDispatch();
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
-  const [likesUpdated, setLikesUpdated] = useState(false);
-  const [commentsUpdated, setCommentsUpdated] = useState(false);
 
   // Get data from Redux store
   const {
@@ -46,9 +44,9 @@ const BlogDetail = () => {
   } = useSelector((state) => state.blog);
   const { userInfo } = useSelector((state) => state.account);
 
-  // Fetch blog detail and images
+  // Separate useEffect for initial data load
   useEffect(() => {
-    const fetchBlogData = async () => {
+    const fetchInitialData = async () => {
       await Promise.all([
         dispatch(getBlogDetail(blogId)),
         dispatch(getBlogImages(blogId)),
@@ -57,10 +55,8 @@ const BlogDetail = () => {
       ]);
     };
 
-    fetchBlogData();
-    setLikesUpdated(false);
-    setCommentsUpdated(false);
-  }, [dispatch, blogId, likesUpdated, commentsUpdated]);
+    fetchInitialData();
+  }, [dispatch, blogId]); // Only run on initial load
 
   // Filter images that match the current post ID
   const postImages =
@@ -85,7 +81,11 @@ const BlogDetail = () => {
       if (result.success) {
         message.success("Comment posted successfully");
         setNewComment("");
-        setCommentsUpdated(true);
+        // Only fetch comments and update count
+        await Promise.all([
+          dispatch(getComments(blogId)),
+          dispatch(getBlogDetail(blogId)), // We still need this for comments_count
+        ]);
       } else {
         message.error(result.error || "Failed to post comment");
       }
@@ -137,7 +137,11 @@ const BlogDetail = () => {
         result = await dispatch(unlikePost(blogId, like_id, userData));
         if (result.success) {
           message.success("Post unliked successfully");
-          setLikesUpdated(true);
+          // Only fetch likes and update count
+          await Promise.all([
+            dispatch(getPostLikes(blogId)),
+            dispatch(getBlogDetail(blogId)), // We still need this for likes_count
+          ]);
         } else {
           message.error(result.error || "Failed to unlike post");
         }
@@ -145,7 +149,11 @@ const BlogDetail = () => {
         result = await dispatch(likePost(blogId, userData));
         if (result.success) {
           message.success("Post liked successfully");
-          setLikesUpdated(true);
+          // Only fetch likes and update count
+          await Promise.all([
+            dispatch(getPostLikes(blogId)),
+            dispatch(getBlogDetail(blogId)), // We still need this for likes_count
+          ]);
         } else {
           message.error(result.error || "Failed to like post");
         }
@@ -153,7 +161,6 @@ const BlogDetail = () => {
     } catch (error) {
       console.error("Like/Unlike error:", error);
       message.error("Something went wrong");
-      setLikesUpdated(true);
     }
   };
 

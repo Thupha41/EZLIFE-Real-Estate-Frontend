@@ -408,7 +408,7 @@ export const likePost = (postId, userData) => async (dispatch) => {
       user_email: userData.user_email,
     });
     console.log(response);
-    if (response.status >= 200 && response.status < 300) {
+    if (response) {
       dispatch({
         type: LIKE_POST_SUCCESS,
         payload: {
