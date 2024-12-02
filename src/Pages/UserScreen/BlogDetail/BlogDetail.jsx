@@ -84,11 +84,9 @@ const BlogDetail = () => {
       if (result.success) {
         message.success("Comment posted successfully");
         setNewComment("");
-        // Only fetch comments and update count
-        await Promise.all([
-          dispatch(getComments(blogId)),
-          dispatch(getBlogDetail(blogId)),
-        ]);
+
+        dispatch(getComments(blogId));
+        dispatch(getBlogDetail(blogId));
       } else {
         message.error(result.error || "Failed to post comment");
       }
@@ -140,10 +138,9 @@ const BlogDetail = () => {
         if (result.success) {
           message.success("Post unliked successfully");
           // Only fetch likes and update count
-          await Promise.all([
-            dispatch(getPostLikes(blogId)),
-            dispatch(getBlogDetail(blogId)),
-          ]);
+
+          dispatch(getPostLikes(blogId));
+          dispatch(getBlogDetail(blogId));
         } else {
           message.error(result.error || "Failed to unlike post");
         }
@@ -152,10 +149,9 @@ const BlogDetail = () => {
         if (result.success) {
           message.success("Post liked successfully");
           // Only fetch likes and update count
-          await Promise.all([
-            dispatch(getPostLikes(blogId)),
-            dispatch(getBlogDetail(blogId)),
-          ]);
+
+          dispatch(getPostLikes(blogId));
+          dispatch(getBlogDetail(blogId));
         } else {
           message.error(result.error || "Failed to like post");
         }
@@ -186,10 +182,8 @@ const BlogDetail = () => {
       if (result.success) {
         message.success("Comment updated successfully");
         setEditingCommentId(null);
-        await Promise.all([
-          dispatch(getComments(blogId)),
-          dispatch(getBlogDetail(blogId)),
-        ]);
+        dispatch(getComments(blogId));
+        dispatch(getBlogDetail(blogId));
       } else {
         message.error(result.error || "Failed to update comment");
       }
@@ -204,10 +198,9 @@ const BlogDetail = () => {
       const result = await dispatch(deleteComment(blogId, commentId));
       if (result.success) {
         message.success("Comment deleted successfully");
-        await Promise.all([
-          dispatch(getComments(blogId)),
-          dispatch(getBlogDetail(blogId)),
-        ]);
+
+        dispatch(getComments(blogId));
+        dispatch(getBlogDetail(blogId));
       } else {
         message.error(result.error || "Failed to delete comment");
       }

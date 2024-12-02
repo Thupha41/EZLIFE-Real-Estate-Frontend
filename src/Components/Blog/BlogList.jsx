@@ -25,7 +25,6 @@ const BlogList = () => {
     dispatch(getBlogs());
   }, [dispatch]);
 
-  // Fetch images for each blog post
   useEffect(() => {
     if (blogs?.length > 0) {
       blogs.forEach((blog) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getBlogs, getBlogImages } from "../../../redux/action/blogAction";
 import { BsGridFill, BsFillGrid3X3GapFill } from "react-icons/bs";
@@ -22,6 +22,12 @@ const BlogPage = () => {
   const [gridViewActive, setGridViewActive] = useState(true);
   const [listViewActive, setListViewActive] = useState(false);
 
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    window.scrollTo(0, 0);
+  };
   // Get the featured blog (always first blog)
   const featuredBlog = blogs[0] || null;
   // Get remaining blogs (excluding featured blog)
@@ -114,8 +120,10 @@ const BlogPage = () => {
                   <p className="text-gray-600 mb-6 line-clamp-4">
                     {stripHtmlTagsAndSEP(featuredBlog.content)}
                   </p>
-                  <Link
-                    to={`/blogs/${featuredBlog.id}`}
+                  <button
+                    onClick={() =>
+                      handleNavigation(`/blogs/${featuredBlog.id}`)
+                    }
                     className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
                   >
                     See full
@@ -132,7 +140,7 @@ const BlogPage = () => {
                         d="M9 5l7 7-7 7"
                       />
                     </svg>
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
