@@ -7,26 +7,14 @@ export const subscribeNewsletter = (email) => async (dispatch) => {
   try {
     dispatch({ type: SUBSCRIBE_NEWSLETTER_REQUEST });
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      maxRedirects: 5,
-      validateStatus: function (status) {
-        return status >= 200 && status < 400;
-      },
-    };
-
     const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_SERVICE_URL_SUBSCRIPTION}/subscribers/`,
-      {
-        sub_email: email,
-      },
-      config
+      `${
+        import.meta.env.VITE_BACKEND_SERVICE_URL_SUBSCRIPTION
+      }/subscribers?sub_email=${email}`,
+      ""
     );
-    console.log("check response newsletter", response);
-    if (response.status >= 200 && response.status < 400) {
+
+    if (response.status === 200 || response.status === 201) {
       dispatch({
         type: SUBSCRIBE_NEWSLETTER_SUCCESS,
         payload: "Successfully subscribed to newsletter",
