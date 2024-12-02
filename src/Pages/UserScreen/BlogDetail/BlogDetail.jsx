@@ -8,6 +8,7 @@ import {
   FaHeart,
   FaRegHeart,
   FaRegComment,
+  FaEllipsisV,
 } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
 import BlogItem from "../../../Components/Blog/BlogItem";
@@ -19,14 +20,19 @@ import {
   createComment,
   getComments,
   getPostLikes,
+  updateComment,
+  deleteComment,
 } from "../../../redux/action/blogAction";
-import { message } from "antd";
+import { message, Modal } from "antd";
+import { Dropdown } from "antd";
 
 const BlogDetail = () => {
   const { blogId } = useParams();
   const dispatch = useDispatch();
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedCommentContent, setEditedCommentContent] = useState("");
 
   // Get data from Redux store
   const {
@@ -44,7 +50,6 @@ const BlogDetail = () => {
   } = useSelector((state) => state.blog);
   const { userInfo } = useSelector((state) => state.account);
 
-  // Separate useEffect for initial data load
   useEffect(() => {
     const fetchInitialData = async () => {
       await Promise.all([
@@ -84,7 +89,7 @@ const BlogDetail = () => {
         // Only fetch comments and update count
         await Promise.all([
           dispatch(getComments(blogId)),
-          dispatch(getBlogDetail(blogId)), // We still need this for comments_count
+          dispatch(getBlogDetail(blogId)),
         ]);
       } else {
         message.error(result.error || "Failed to post comment");
@@ -102,7 +107,6 @@ const BlogDetail = () => {
     return isLike;
   };
 
-  // Add this function to get the like_id
   const getUserLikeId = () => {
     if (!userInfo || !postLikes) return null;
     const userLike = postLikes.find(
@@ -140,7 +144,7 @@ const BlogDetail = () => {
           // Only fetch likes and update count
           await Promise.all([
             dispatch(getPostLikes(blogId)),
-            dispatch(getBlogDetail(blogId)), // We still need this for likes_count
+            dispatch(getBlogDetail(blogId)),
           ]);
         } else {
           message.error(result.error || "Failed to unlike post");
@@ -152,7 +156,7 @@ const BlogDetail = () => {
           // Only fetch likes and update count
           await Promise.all([
             dispatch(getPostLikes(blogId)),
-            dispatch(getBlogDetail(blogId)), // We still need this for likes_count
+            dispatch(getBlogDetail(blogId)),
           ]);
         } else {
           message.error(result.error || "Failed to like post");
@@ -166,6 +170,53 @@ const BlogDetail = () => {
 
   const toggleComments = () => {
     setShowComments(!showComments);
+  };
+
+  const handleEditComment = (commentId, currentContent) => {
+    setEditingCommentId(commentId);
+    setEditedCommentContent(currentContent);
+  };
+
+  const handleUpdateComment = async (commentId) => {
+    try {
+      const result = await dispatch(
+        updateComment(blogId, commentId, {
+          content: editedCommentContent.trim(),
+        })
+      );
+
+      if (result.success) {
+        message.success("Comment updated successfully");
+        setEditingCommentId(null);
+        await Promise.all([
+          dispatch(getComments(blogId)),
+          dispatch(getBlogDetail(blogId)),
+        ]);
+      } else {
+        message.error(result.error || "Failed to update comment");
+      }
+    } catch (error) {
+      console.error("Update comment error:", error);
+      message.error("Something went wrong");
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const result = await dispatch(deleteComment(blogId, commentId));
+      if (result.success) {
+        message.success("Comment deleted successfully");
+        await Promise.all([
+          dispatch(getComments(blogId)),
+          dispatch(getBlogDetail(blogId)),
+        ]);
+      } else {
+        message.error(result.error || "Failed to delete comment");
+      }
+    } catch (error) {
+      console.error("Delete comment error:", error);
+      message.error("Something went wrong");
+    }
   };
 
   if (blogDetailLoading) return <div>Loading...</div>;
@@ -352,13 +403,85 @@ const BlogDetail = () => {
                             <span className="font-semibold">
                               {comment.user_name}
                             </span>
-                            <span className="text-sm text-gray-500">
-                              {new Date(
-                                comment.created_at
-                              ).toLocaleDateString()}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-500">
+                                {new Date(
+                                  comment.created_at
+                                ).toLocaleDateString()}
+                              </span>
+                              {userInfo &&
+                                comment.user_id === userInfo.user_id && (
+                                  <Dropdown
+                                    menu={{
+                                      items: [
+                                        {
+                                          key: "1",
+                                          label: "Edit",
+                                          onClick: () =>
+                                            handleEditComment(
+                                              comment.id,
+                                              comment.content
+                                            ),
+                                        },
+                                        {
+                                          key: "2",
+                                          label: "Delete",
+                                          danger: true,
+                                          onClick: () => {
+                                            Modal.confirm({
+                                              title: "Delete Comment",
+                                              content:
+                                                "Are you sure you want to delete this comment?",
+                                              okText: "Yes",
+                                              okType: "danger",
+                                              cancelText: "No",
+                                              onOk: () =>
+                                                handleDeleteComment(comment.id),
+                                            });
+                                          },
+                                        },
+                                      ],
+                                    }}
+                                    trigger={["click"]}
+                                    placement="bottomRight"
+                                  >
+                                    <button className="text-gray-500 hover:text-gray-700">
+                                      <FaEllipsisV size={16} />
+                                    </button>
+                                  </Dropdown>
+                                )}
+                            </div>
                           </div>
-                          <p className="text-gray-700">{comment.content}</p>
+                          {editingCommentId === comment.id ? (
+                            <div className="mt-2">
+                              <textarea
+                                value={editedCommentContent}
+                                onChange={(e) =>
+                                  setEditedCommentContent(e.target.value)
+                                }
+                                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary resize-none"
+                                rows="3"
+                              />
+                              <div className="flex justify-end gap-2 mt-2">
+                                <button
+                                  onClick={() => setEditingCommentId(null)}
+                                  className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleUpdateComment(comment.id)
+                                  }
+                                  className="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-opacity-90"
+                                >
+                                  Save
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="text-gray-700">{comment.content}</p>
+                          )}
                         </div>
                       </div>
                     </div>
