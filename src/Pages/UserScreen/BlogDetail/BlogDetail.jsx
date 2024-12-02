@@ -53,7 +53,7 @@ const BlogDetail = () => {
   const { userInfo } = useSelector((state) => state.account);
 
   useEffect(() => {
-    // dispatch(getBlogDetail(blogId));
+    dispatch(getBlogDetail(blogId));
     dispatch(getBlogImages(blogId));
     dispatch(getComments(blogId));
     dispatch(getPostLikes(blogId));
