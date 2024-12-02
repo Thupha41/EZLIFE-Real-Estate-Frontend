@@ -69,6 +69,14 @@ const BlogDetail = () => {
     }
   }, [blogDetail]);
 
+  useEffect(() => {
+    if (blogs && blogs.length > 0) {
+      blogs.forEach((blog) => {
+        dispatch(getBlogImages(blog.id));
+      });
+    }
+  }, [dispatch, blogs]);
+
   // Filter images that match the current post ID
   const postImages =
     blogImages?.filter((img) => img.post === parseInt(blogId)) || [];
