@@ -56,7 +56,7 @@ const BlogDetail = () => {
 
   useEffect(() => {
     dispatch(getBlogDetail(blogId));
-    dispatch(getBlogImages(blogId));
+    // dispatch(getBlogImages(blogId));
     dispatch(getComments(blogId));
     dispatch(getPostLikes(blogId));
     dispatch(getBlogs());
