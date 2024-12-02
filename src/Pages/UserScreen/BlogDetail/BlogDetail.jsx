@@ -236,18 +236,14 @@ const BlogDetail = () => {
       .slice(0, 3);
   };
 
+  const cleanContent = (html) => {
+    // Chỉ loại bỏ [SEP] và giữ nguyên các thẻ HTML khác
+    return html.replace(/\[SEP\]/g, "").trim();
+  };
+
   if (blogDetailLoading) return <div>Loading...</div>;
   if (blogDetailError) return <div>Error: {blogDetailError}</div>;
   if (!blogDetail) return <div>No blog found</div>;
-  const stripHtmlTagsAndSEP = (html) => {
-    // First remove HTML tags
-    const tmp = document.createElement("div");
-    tmp.innerHTML = html;
-    const text = tmp.textContent || tmp.innerText || "";
-
-    // Then remove [SEP] and trim spaces
-    return text.replace(/\[SEP\]/g, "").trim();
-  };
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -274,7 +270,11 @@ const BlogDetail = () => {
                 </span>
               </div>
               <div className="prose max-w-none">
-                {stripHtmlTagsAndSEP(blogDetail.content)}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: cleanContent(blogDetail.content),
+                  }}
+                />
               </div>
 
               {/* Social Share */}
@@ -517,7 +517,7 @@ const BlogDetail = () => {
                   authorName={blog.user_name}
                   date={new Date(blog.created_at).toLocaleDateString()}
                   description={
-                    stripHtmlTagsAndSEP(blog.content).substring(0, 150) + "..."
+                    cleanContent(blog.content).substring(0, 150) + "..."
                   }
                   thumbnail={getBlogImageUrl(blog.id)}
                 />
