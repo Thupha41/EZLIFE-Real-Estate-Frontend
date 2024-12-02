@@ -14,7 +14,7 @@ export const subscribeNewsletter = (email) => async (dispatch) => {
       ""
     );
 
-    if (response.status === 200 || response.status === 201) {
+    if (response) {
       dispatch({
         type: SUBSCRIBE_NEWSLETTER_SUCCESS,
         payload: "Successfully subscribed to newsletter",
@@ -28,11 +28,7 @@ export const subscribeNewsletter = (email) => async (dispatch) => {
     throw new Error("Failed to subscribe to newsletter");
   } catch (error) {
     console.error("Newsletter subscription error:", error);
-
-    if (
-      error.response?.status === 500 &&
-      error.response?.data?.detail?.includes("Duplicate entry")
-    ) {
+    if (error.response?.detail?.includes("Duplicate entry")) {
       dispatch({
         type: SUBSCRIBE_NEWSLETTER_FAILURE,
         payload: "This email is already subscribed to our newsletter.",
@@ -42,24 +38,5 @@ export const subscribeNewsletter = (email) => async (dispatch) => {
         message: "This email is already subscribed to our newsletter.",
       };
     }
-
-    if (error.response?.status === 400) {
-      const message =
-        error.response?.data?.sub_email?.[0] || "Invalid email format.";
-      dispatch({
-        type: SUBSCRIBE_NEWSLETTER_FAILURE,
-        payload: message,
-      });
-      return { success: false, message };
-    }
-
-    dispatch({
-      type: SUBSCRIBE_NEWSLETTER_FAILURE,
-      payload: "An error occurred while subscribing. Please try again later.",
-    });
-    return {
-      success: false,
-      message: "An error occurred while subscribing. Please try again later.",
-    };
   }
 };
