@@ -62,15 +62,13 @@ const CreateBlog = () => {
         // Upload images if there are any
         if (files.length > 0) {
           const postId = result.data.id;
-          console.log("Post ID:", postId);
+
           // Upload images sequentially
           for (const file of files) {
             const imageData = {
               file: file,
               label: labels || file.name,
             };
-
-            console.log("Uploading image:", imageData); // Debug log
 
             const uploadResult = await dispatch(
               uploadBlogImage(postId, imageData)

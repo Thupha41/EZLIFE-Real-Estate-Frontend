@@ -53,17 +53,11 @@ const BlogDetail = () => {
   const { userInfo } = useSelector((state) => state.account);
 
   useEffect(() => {
-    const fetchInitialData = async () => {
-      await Promise.all([
-        dispatch(getBlogDetail(blogId)),
-        dispatch(getBlogImages(blogId)),
-        dispatch(getComments(blogId)),
-        dispatch(getPostLikes(blogId)),
-        dispatch(getBlogs()),
-      ]);
-    };
-
-    fetchInitialData();
+    dispatch(getBlogDetail(blogId));
+    dispatch(getBlogImages(blogId));
+    dispatch(getComments(blogId));
+    dispatch(getPostLikes(blogId));
+    dispatch(getBlogs());
   }, [dispatch, blogId]);
 
   // Filter images that match the current post ID
@@ -104,7 +98,6 @@ const BlogDetail = () => {
   const hasUserLiked = () => {
     if (!userInfo || !postLikes) return false;
     const isLike = postLikes.some((like) => like.user_id === userInfo.user_id);
-    console.log(isLike);
     return isLike;
   };
 
@@ -406,7 +399,7 @@ const BlogDetail = () => {
                         <FaRegUser className="text-gray-500" />
                       </div>
                       <div className="flex-grow">
-                        <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="bg-gray-50 rounded-lg">
                           <div className="flex justify-between items-center mb-2">
                             <span className="font-semibold">
                               {comment.user_name}
