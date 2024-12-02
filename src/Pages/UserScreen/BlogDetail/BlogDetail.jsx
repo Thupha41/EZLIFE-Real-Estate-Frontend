@@ -53,7 +53,7 @@ const BlogDetail = () => {
   const { userInfo } = useSelector((state) => state.account);
 
   useEffect(() => {
-    dispatch(getBlogDetail(blogId));
+    // dispatch(getBlogDetail(blogId));
     dispatch(getBlogImages(blogId));
     dispatch(getComments(blogId));
     dispatch(getPostLikes(blogId));
@@ -85,7 +85,7 @@ const BlogDetail = () => {
         setNewComment("");
 
         dispatch(getComments(blogId));
-        dispatch(getBlogDetail(blogId));
+        // dispatch(getBlogDetail(blogId));
       } else {
         message.error(result.error || "Failed to post comment");
       }
@@ -140,7 +140,7 @@ const BlogDetail = () => {
         if (result.success) {
           message.success("Post unliked successfully");
           dispatch(getPostLikes(blogId));
-          dispatch(getBlogDetail(blogId));
+          // dispatch(getBlogDetail(blogId));
         } else {
           message.error(result.error || "Failed to unlike post");
         }
@@ -181,7 +181,7 @@ const BlogDetail = () => {
         message.success("Comment updated successfully");
         setEditingCommentId(null);
         dispatch(getComments(blogId));
-        dispatch(getBlogDetail(blogId));
+        // dispatch(getBlogDetail(blogId));
       } else {
         message.error(result.error || "Failed to update comment");
       }
@@ -198,7 +198,7 @@ const BlogDetail = () => {
         message.success("Comment deleted successfully");
 
         dispatch(getComments(blogId));
-        dispatch(getBlogDetail(blogId));
+        // dispatch(getBlogDetail(blogId));
       } else {
         message.error(result.error || "Failed to delete comment");
       }
