@@ -22,6 +22,7 @@ import {
   getPostLikes,
   updateComment,
   deleteComment,
+  getBlogs,
 } from "../../../redux/action/blogAction";
 import { message, Modal } from "antd";
 import { Dropdown } from "antd";
@@ -47,19 +48,23 @@ const BlogDetail = () => {
     commentsLoading,
     commentsError,
     postLikes,
+    blogs,
   } = useSelector((state) => state.blog);
   const { userInfo } = useSelector((state) => state.account);
 
   useEffect(() => {
-    const fetchInitialData = () => {
-      dispatch(getBlogDetail(blogId));
-      dispatch(getBlogImages(blogId));
-      dispatch(getComments(blogId));
-      dispatch(getPostLikes(blogId));
+    const fetchInitialData = async () => {
+      await Promise.all([
+        dispatch(getBlogDetail(blogId)),
+        dispatch(getBlogImages(blogId)),
+        dispatch(getComments(blogId)),
+        dispatch(getPostLikes(blogId)),
+        dispatch(getBlogs()),
+      ]);
     };
 
     fetchInitialData();
-  }, [dispatch, blogId]); // Only run on initial load
+  }, [dispatch, blogId]);
 
   // Filter images that match the current post ID
   const postImages =
@@ -208,6 +213,18 @@ const BlogDetail = () => {
       console.error("Delete comment error:", error);
       message.error("Something went wrong");
     }
+  };
+
+  const getRelatedArticles = () => {
+    if (!blogs || !blogDetail) return [];
+
+    return blogs
+      .filter(
+        (blog) =>
+          // Filter blogs from same category but exclude current blog
+          blog.category === blogDetail.category && blog.id !== parseInt(blogId)
+      )
+      .slice(0, 3);
   };
 
   if (blogDetailLoading) return <div>Loading...</div>;
@@ -487,19 +504,23 @@ const BlogDetail = () => {
         <div className="lg:col-span-1">
           <h2 className="text-xl font-bold mb-6">Related Articles</h2>
           <div className="space-y-6">
-            {blogDetail.related_posts?.map((blog) => (
-              <BlogItem
-                key={blog.id}
-                blogID={blog.id}
-                title={blog.title}
-                authorName={blog.user_name}
-                date={new Date(blog.created_at).toLocaleDateString()}
-                description={
-                  stripHtmlTagsAndSEP(blog.content).substring(0, 150) + "..."
-                }
-                thumbnail={blog.thumbnail_url}
-              />
-            ))}
+            {getRelatedArticles().length > 0 ? (
+              getRelatedArticles().map((blog) => (
+                <BlogItem
+                  key={blog.id}
+                  blogID={blog.id}
+                  title={blog.title}
+                  authorName={blog.user_name}
+                  date={new Date(blog.created_at).toLocaleDateString()}
+                  description={
+                    stripHtmlTagsAndSEP(blog.content).substring(0, 150) + "..."
+                  }
+                  thumbnail={blog.thumbnail_url}
+                />
+              ))
+            ) : (
+              <p className="text-gray-500">No related articles found</p>
+            )}
           </div>
         </div>
       </div>
