@@ -8,13 +8,13 @@ export const subscribeNewsletter = (email) => async (dispatch) => {
     dispatch({ type: SUBSCRIBE_NEWSLETTER_REQUEST });
 
     const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_SERVICE_URL}/subscribe/`,
+      `${import.meta.env.VITE_BACKEND_SERVICE_URL_SUBSCRIPTION}/subscribers/`,
       {
         sub_email: email,
       }
     );
 
-    if (response.status === 201) {
+    if (response) {
       return dispatch({
         type: SUBSCRIBE_NEWSLETTER_SUCCESS,
         payload: response.data.message,
