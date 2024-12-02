@@ -317,13 +317,13 @@ export const updateComment =
         `/blogs/posts/${postId}/comments/${commentId}/update/`,
         commentData
       );
-
-      if (response?.data) {
+      console.log("check edit comment response", response);
+      if (response.status === 200) {
         dispatch({
           type: UPDATE_COMMENT_SUCCESS,
-          payload: response.data,
+          payload: response,
         });
-        return { success: true, data: response.data };
+        return { success: true, data: response };
       } else {
         throw new Error("Invalid response format");
       }
