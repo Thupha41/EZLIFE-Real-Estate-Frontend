@@ -2,13 +2,16 @@
 import { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoIosBusiness } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./AccountSetting.css";
 import BlogList from "../../../Components/Blog/BlogList";
 import CreateBlog from "../../../Components/Blog/CreateBlog";
+import { updateUsers } from "../../../redux/action/userAction";
+import { message } from "antd";
 
 const AccountSetting = () => {
   const user = useSelector((state) => state.account.userInfo);
+  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [memberInfo, setMemberInfo] = useState({
     email: "",
@@ -16,7 +19,8 @@ const AccountSetting = () => {
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
-    username: "",
+    first_name: "",
+    last_name: "",
     phone: "",
     marketingAgreement: true,
   });
@@ -37,7 +41,8 @@ const AccountSetting = () => {
         oldPassword: "",
         newPassword: "",
         confirmPassword: "",
-        username: user.username || "",
+        first_name: user.first_name || "",
+        last_name: user.last_name || "",
         phone: user.phone || "",
         marketingAgreement: true,
       });
@@ -55,29 +60,50 @@ const AccountSetting = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     if (memberInfo.newPassword || memberInfo.confirmPassword) {
       if (!memberInfo.oldPassword) {
-        alert("Please enter your current password");
+        message.error("Please enter your current password");
         return;
       }
       if (memberInfo.newPassword !== memberInfo.confirmPassword) {
-        alert("New passwords do not match");
+        message.error("New passwords do not match");
         return;
       }
       if (memberInfo.newPassword.length < 6) {
-        alert("New password must be at least 6 characters long");
+        message.error("New password must be at least 6 characters long");
         return;
       }
     }
-    // TODO: Add API call to update user information
-    setIsEditing(false);
-    setMemberInfo((prev) => ({
-      ...prev,
-      oldPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    }));
+
+    const userData = {
+      id: user.id,
+      first_name: memberInfo.first_name,
+      last_name: memberInfo.last_name,
+      phone: memberInfo.phone,
+      password: memberInfo.newPassword || "",
+      oldPassword: memberInfo.oldPassword || "",
+    };
+
+    try {
+      const result = await dispatch(updateUsers([userData]));
+
+      if (result.success) {
+        message.success("Profile updated successfully");
+        setIsEditing(false);
+        setMemberInfo((prev) => ({
+          ...prev,
+          oldPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        }));
+      } else {
+        message.error(result.error || "Failed to update profile");
+      }
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong");
+    }
   };
 
   const handleCompanyInputChange = (e) => {
