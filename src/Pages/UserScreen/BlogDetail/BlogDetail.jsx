@@ -34,6 +34,8 @@ const BlogDetail = () => {
   const [showComments, setShowComments] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedCommentContent, setEditedCommentContent] = useState("");
+  const [localLikesCount, setLocalLikesCount] = useState(0);
+  const [localCommentsCount, setLocalCommentsCount] = useState(0);
 
   // Get data from Redux store
   const {
@@ -60,6 +62,13 @@ const BlogDetail = () => {
     dispatch(getBlogs());
   }, [dispatch, blogId]);
 
+  useEffect(() => {
+    if (blogDetail) {
+      setLocalLikesCount(blogDetail.likes_count || 0);
+      setLocalCommentsCount(blogDetail.comments_count || 0);
+    }
+  }, [blogDetail]);
+
   // Filter images that match the current post ID
   const postImages =
     blogImages?.filter((img) => img.post === parseInt(blogId)) || [];
@@ -83,9 +92,8 @@ const BlogDetail = () => {
       if (result.success) {
         message.success("Comment posted successfully");
         setNewComment("");
-
         dispatch(getComments(blogId));
-        // dispatch(getBlogDetail(blogId));
+        setLocalCommentsCount((prev) => prev + 1);
       } else {
         message.error(result.error || "Failed to post comment");
       }
@@ -140,7 +148,7 @@ const BlogDetail = () => {
         if (result.success) {
           message.success("Post unliked successfully");
           dispatch(getPostLikes(blogId));
-          // dispatch(getBlogDetail(blogId));
+          setLocalLikesCount((prev) => Math.max(0, prev - 1));
         } else {
           message.error(result.error || "Failed to unlike post");
         }
@@ -149,7 +157,7 @@ const BlogDetail = () => {
         if (result.success) {
           message.success("Post liked successfully");
           dispatch(getPostLikes(blogId));
-          dispatch(getBlogDetail(blogId));
+          setLocalLikesCount((prev) => prev + 1);
         } else {
           message.error(result.error || "Failed to like post");
         }
@@ -181,7 +189,6 @@ const BlogDetail = () => {
         message.success("Comment updated successfully");
         setEditingCommentId(null);
         dispatch(getComments(blogId));
-        // dispatch(getBlogDetail(blogId));
       } else {
         message.error(result.error || "Failed to update comment");
       }
@@ -196,9 +203,8 @@ const BlogDetail = () => {
       const result = await dispatch(deleteComment(blogId, commentId));
       if (result.success) {
         message.success("Comment deleted successfully");
-
         dispatch(getComments(blogId));
-        // dispatch(getBlogDetail(blogId));
+        setLocalCommentsCount((prev) => Math.max(0, prev - 1));
       } else {
         message.error(result.error || "Failed to delete comment");
       }
@@ -286,18 +292,13 @@ const BlogDetail = () => {
               <div className="flex items-center gap-2">
                 <FaHeart className="text-red-500" size={20} />
                 <span className="text-gray-700">
-                  <span className="font-semibold">
-                    {blogDetail.likes_count || 0}
-                  </span>{" "}
-                  likes
+                  <span className="font-semibold">{localLikesCount}</span> likes
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <FaRegComment className="text-gray-500" size={20} />
                 <span className="text-gray-700">
-                  <span className="font-semibold">
-                    {blogDetail.comments_count || 0}
-                  </span>{" "}
+                  <span className="font-semibold">{localCommentsCount}</span>{" "}
                   comments
                 </span>
               </div>
@@ -332,7 +333,7 @@ const BlogDetail = () => {
               className="flex items-center gap-2 cursor-pointer mb-6 select-none"
             >
               <h2 className="text-xl font-bold">
-                Comments ({blogDetail.comments_count || 0})
+                Comments ({localCommentsCount})
               </h2>
               <span
                 className={`transition-transform duration-200 ${
