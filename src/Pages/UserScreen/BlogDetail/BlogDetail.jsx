@@ -56,7 +56,7 @@ const BlogDetail = () => {
 
   useEffect(() => {
     dispatch(getBlogDetail(blogId));
-    // dispatch(getBlogImages(blogId));
+    dispatch(getBlogImages(blogId));
     dispatch(getComments(blogId));
     dispatch(getPostLikes(blogId));
     dispatch(getBlogs());
@@ -69,13 +69,16 @@ const BlogDetail = () => {
     }
   }, [blogDetail]);
 
+  // Separate useEffect for related articles' images
   useEffect(() => {
     if (blogs && blogs.length > 0) {
-      blogs.forEach((blog) => {
+      // Filter out the current blog and fetch images only for related articles
+      const relatedBlogs = blogs.filter((blog) => blog.id !== parseInt(blogId));
+      relatedBlogs.forEach((blog) => {
         dispatch(getBlogImages(blog.id));
       });
     }
-  }, [dispatch, blogs]);
+  }, [dispatch, blogs, blogId]);
 
   // Filter images that match the current post ID
   const postImages =
@@ -224,7 +227,6 @@ const BlogDetail = () => {
 
   const getRelatedArticles = () => {
     if (!blogs || !blogDetail) return [];
-
     return blogs
       .filter(
         (blog) =>
