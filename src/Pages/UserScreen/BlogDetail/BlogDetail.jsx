@@ -83,7 +83,15 @@ const BlogDetail = () => {
   // Filter images that match the current post ID
   const postImages =
     blogImages?.filter((img) => img.post === parseInt(blogId)) || [];
+  const stripHtmlTagsAndSEP = (html) => {
+    // First remove HTML tags
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    const text = tmp.textContent || tmp.innerText || "";
 
+    // Then remove [SEP] and trim spaces
+    return text.replace(/\[SEP\]/g, "").trim();
+  };
   const handleSubmitComment = async (e) => {
     e.preventDefault();
     if (!userInfo) {
@@ -517,7 +525,7 @@ const BlogDetail = () => {
                   authorName={blog.user_name}
                   date={new Date(blog.created_at).toLocaleDateString()}
                   description={
-                    cleanContent(blog.content).substring(0, 150) + "..."
+                    stripHtmlTagsAndSEP(blog.content).substring(0, 150) + "..."
                   }
                   thumbnail={getBlogImageUrl(blog.id)}
                 />
