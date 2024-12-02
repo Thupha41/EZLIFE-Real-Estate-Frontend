@@ -132,6 +132,7 @@ const UserManagement = () => {
       last_name: user.last_name || "",
       email: user.email || "",
       phone: user.phone || "",
+      password: user.password || "",
       address: user.address || "",
       roleId: user.Role?.id || "",
       typeLogin: user.typeLogin || "local",
@@ -392,15 +393,15 @@ const UserManagement = () => {
                     className={editUserId ? "bg-gray-100" : ""}
                   />
                 </Form.Item>
-                {!editUserId && (
-                  <Form.Item
-                    name="password"
-                    label="Password"
-                    rules={[{ required: true }]}
-                  >
-                    <Input.Password />
-                  </Form.Item>
-                )}
+
+                <Form.Item
+                  name="password"
+                  label="Password"
+                  rules={[{ required: true }]}
+                >
+                  <Input.Password />
+                </Form.Item>
+
                 <Form.Item name="phone" label="Phone">
                   <Input />
                 </Form.Item>

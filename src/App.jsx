@@ -26,13 +26,13 @@ const App = () => {
   }, []);
   return (
     <Router>
-      {/* {isLoading ? (
+      {isLoading ? (
         <div style={style}>
           <HashLoader color={"#fd7e14"} loading={true} size={150} />
         </div>
-      ) : ( */}
-      <AppContent firstRenderRef={firstRenderRef} />
-      {/* )} */}
+      ) : (
+        <AppContent firstRenderRef={firstRenderRef} />
+      )}
     </Router>
   );
 };
