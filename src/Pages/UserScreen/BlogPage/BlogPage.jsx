@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getBlogs, getBlogImages } from "../../../redux/action/blogAction";
 import { BsGridFill, BsFillGrid3X3GapFill } from "react-icons/bs";
@@ -205,8 +205,8 @@ const BlogPage = () => {
                   <p className="text-gray-600 mb-4 line-clamp-3">
                     {stripHtmlTagsAndSEP(blog.content)}
                   </p>
-                  <Link
-                    to={`/blogs/${blog.id}`}
+                  <button
+                    onClick={() => handleNavigation(`/blogs/${blog.id}`)}
                     className="inline-flex items-center text-primary hover:text-primary-dark font-medium text-sm"
                   >
                     See full
@@ -223,7 +223,7 @@ const BlogPage = () => {
                         d="M9 5l7 7-7 7"
                       />
                     </svg>
-                  </Link>
+                  </button>
                 </div>
               </div>
             ))}

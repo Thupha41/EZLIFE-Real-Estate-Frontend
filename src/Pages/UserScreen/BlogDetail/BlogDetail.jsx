@@ -115,8 +115,12 @@ const BlogDetail = () => {
     );
     return userLike ? userLike.id : null;
   };
-
-  const handleLikeToggle = async () => {
+  const getBlogImageUrl = (blogId) => {
+    const blogImage = blogImages.find((img) => img.post === blogId);
+    return blogImage?.image_url || "/default-thumbnail.jpg";
+  };
+  const handleLikeToggle = async (e) => {
+    e.preventDefault();
     if (!userInfo) {
       message.error("Please login to like this post");
       return;
@@ -142,8 +146,6 @@ const BlogDetail = () => {
         result = await dispatch(unlikePost(blogId, like_id, userData));
         if (result.success) {
           message.success("Post unliked successfully");
-          // Only fetch likes and update count
-
           dispatch(getPostLikes(blogId));
           dispatch(getBlogDetail(blogId));
         } else {
@@ -153,8 +155,6 @@ const BlogDetail = () => {
         result = await dispatch(likePost(blogId, userData));
         if (result.success) {
           message.success("Post liked successfully");
-          // Only fetch likes and update count
-
           dispatch(getPostLikes(blogId));
           dispatch(getBlogDetail(blogId));
         } else {
@@ -312,7 +312,7 @@ const BlogDetail = () => {
 
             {/* Like Button */}
             <button
-              onClick={handleLikeToggle}
+              onClick={(e) => handleLikeToggle(e)}
               disabled={likePostLoading}
               className={`flex items-center gap-2 transition-colors mb-6 ${
                 hasUserLiked()
@@ -515,7 +515,7 @@ const BlogDetail = () => {
                   description={
                     stripHtmlTagsAndSEP(blog.content).substring(0, 150) + "..."
                   }
-                  thumbnail={blog.thumbnail_url}
+                  thumbnail={getBlogImageUrl(blog.id)}
                 />
               ))
             ) : (
