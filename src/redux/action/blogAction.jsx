@@ -64,9 +64,6 @@ export const createBlogPost = (blogData) => async (dispatch) => {
 
     const response = await axios.post(`/blogs/posts/create/`, blogData);
 
-    console.log("Full API Response:", response);
-    console.log("Response data:", response.DT);
-
     dispatch({
       type: CREATE_BLOG_SUCCESS,
       payload: response.DT,
@@ -259,7 +256,7 @@ export const getComments = (postId) => async (dispatch) => {
     dispatch({ type: GET_COMMENTS_REQUEST });
 
     const response = await axios.get(`/blogs/posts/${postId}/comments/`);
-    console.log(">> check comments", response);
+
     if (response) {
       dispatch({
         type: GET_COMMENTS_SUCCESS,
@@ -317,8 +314,8 @@ export const updateComment =
         `/blogs/posts/${postId}/comments/${commentId}/update/`,
         commentData
       );
-      console.log("check edit comment response", response);
-      if (response.status === 200) {
+
+      if (response) {
         dispatch({
           type: UPDATE_COMMENT_SUCCESS,
           payload: response,
@@ -331,12 +328,12 @@ export const updateComment =
       console.error("Error updating comment:", error);
       dispatch({
         type: UPDATE_COMMENT_FAILURE,
-        payload: error.response?.data?.message || "Failed to update comment",
+        payload: error.response || "Failed to update comment",
       });
 
       return {
         success: false,
-        error: error.response?.data?.message || "Failed to update comment",
+        error: error.response || "Failed to update comment",
       };
     }
   };
@@ -374,7 +371,6 @@ export const updateBlog = (postId, blogData) => async (dispatch) => {
       `/blogs/posts/${postId}/update/`,
       blogData
     );
-    console.log("Response:", response);
     if (response) {
       dispatch({
         type: UPDATE_BLOG_SUCCESS,
@@ -407,7 +403,7 @@ export const likePost = (postId, userData) => async (dispatch) => {
       user_name: userData.user_name,
       user_email: userData.user_email,
     });
-    console.log(response);
+
     if (response) {
       dispatch({
         type: LIKE_POST_SUCCESS,

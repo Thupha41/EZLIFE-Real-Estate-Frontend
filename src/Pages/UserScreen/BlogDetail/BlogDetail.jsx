@@ -51,13 +51,11 @@ const BlogDetail = () => {
   const { userInfo } = useSelector((state) => state.account);
 
   useEffect(() => {
-    const fetchInitialData = async () => {
-      await Promise.all([
-        dispatch(getBlogDetail(blogId)),
-        dispatch(getBlogImages(blogId)),
-        dispatch(getComments(blogId)),
-        dispatch(getPostLikes(blogId)),
-      ]);
+    const fetchInitialData = () => {
+      dispatch(getBlogDetail(blogId));
+      dispatch(getBlogImages(blogId));
+      dispatch(getComments(blogId));
+      dispatch(getPostLikes(blogId));
     };
 
     fetchInitialData();
