@@ -25,19 +25,18 @@ const Newsletter = () => {
     e.preventDefault();
 
     try {
-      // Dispatch returns a promise that resolves to the action
-      const action = await dispatch(subscribeNewsletter(email));
+      // Dispatch returns the object we return in the action creator
+      const result = await dispatch(subscribeNewsletter(email));
 
-      // Check the type of action to determine success/failure
-      if (action?.type === "SUBSCRIBE_NEWSLETTER_SUCCESS") {
-        showNotification("success", action.payload);
+      // Check the success property instead of action type
+      if (result.success) {
+        showNotification("success", result.message);
         setEmail("");
-      } else if (action?.payload) {
-        // Show error message from the action payload
-        showNotification("error", action.payload);
+      } else {
+        showNotification("error", result.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       showNotification("error", "Failed to subscribe. Please try again.");
     }
   };
