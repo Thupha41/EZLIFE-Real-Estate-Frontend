@@ -23,9 +23,16 @@ export const subscribeNewsletter = (email) => async (dispatch) => {
         success: true,
         message: "Successfully subscribed to newsletter",
       };
+    } else {
+      dispatch({
+        type: SUBSCRIBE_NEWSLETTER_FAILURE,
+        payload: "This email is already subscribed to our newsletter.",
+      });
+      return {
+        success: false,
+        message: "This email is already subscribed to our newsletter.",
+      };
     }
-
-    throw new Error("Failed to subscribe to newsletter");
   } catch (error) {
     console.error("Newsletter subscription error:", error);
     if (error.response?.detail?.includes("Duplicate entry")) {
