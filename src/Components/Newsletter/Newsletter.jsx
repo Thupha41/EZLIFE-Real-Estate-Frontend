@@ -37,7 +37,7 @@ const Newsletter = () => {
       }
     } catch (error) {
       console.error(error);
-      showNotification("error", "Failed to subscribe. Please try again.");
+      showNotification("error", error.response?.data?.detail);
     }
   };
 
