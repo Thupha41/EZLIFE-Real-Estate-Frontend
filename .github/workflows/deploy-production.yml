@@ -2,9 +2,9 @@ name: Deploy Production
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
   pull_request:
-    branches: ['main']
+    branches: ["main"]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.18.1
-          cache: 'npm'
+          cache: "npm"
       - name: Create .env file
         run: echo "${{secrets.ENV_PRODUCTION}}" > .env
       - run: npm i --force
@@ -30,6 +30,7 @@ jobs:
           host: ${{ secrets.HOST_PRODUCTION }}
           username: ${{ secrets.USERNAME_PRODUCTION }}
           password: ${{ secrets.PASSWORD_PRODUCTION }}
+          port: ${{ secrets.PORT_PRODUCTION }}
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
