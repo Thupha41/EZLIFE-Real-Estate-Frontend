@@ -34,11 +34,9 @@ jobs:
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            cd ~/deploy-node-server
+            cd ~/EZLIFE-Real-Estate-Frontend
             git fetch --all
             git reset --hard origin/main
             echo "${{secrets.ENV_PRODUCTION}}" > .env
             npm i --force
-            npx prisma generate
             npm run build
-            pm2 restart Fastify
